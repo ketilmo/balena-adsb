@@ -14,7 +14,7 @@ COPY ./rtlsdr-blacklist.conf /etc/modprobe.d/rtlsdr-blacklist.conf
 
 WORKDIR tmp
 
-RUN wget http://flightaware.com/adsb/piaware/files/packages/pool/piaware/p/piaware-support/piaware-repository_3.8.0_all.deb
+RUN wget http://flightaware.com/adsb/piaware/files/packages/pool/piaware/p/piaware-support/piaware-repository_3.8.0~bpo9+1_all.deb
 
 RUN apt-get update && \
 	apt-get install -y librtlsdr0 libusb-1.0-0 init-system-helpers lighttpd supervisor
