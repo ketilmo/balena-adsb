@@ -18,15 +18,19 @@ We'll build the receiver using the parts that are outlined on the Flightradar24 
 - https://www.flightradar24.com/build-your-own
 - https://flightaware.com/adsb/piaware/build.
 
-If you wish to keep the setup as cheap as possible, you can use a Raspberry Pi Zero rather than the described Raspberry Pi 3 B+. The Raspberry Pi Zero comes without ethernet, however. If you need this, you will have to buy [a breakout cable](https://shop.pimoroni.com/products/three-port-usb-hub-with-ethernet-and-microb-connector), too. Keep in mind that the Zero is less powerful than the 3 B+. If you plan to run a lot of services simultaneously, you should probably go all-in on the 3 B+.
+If you wish to keep the setup as cheap as possible, you can use a Raspberry Pi Zero rather than the described Raspberry Pi 3 B+. The Raspberry Pi Zero comes without ethernet, however. If you need this, you will have to buy [a breakout cable](https://shop.pimoroni.com/products/three-port-usb-hub-with-ethernet-and-microb-connector), too. Keep in mind that the Zero is less powerful than the 3 B+. If you plan to run a lot of services simultaneously, you should probably go all-in on the 3 B+. **Note:** A Raspberry Pi 4 is currently not supported.
 
 In addition to the Pi, you will need an RTL-SDR compatible USB dongle. The dongles are based on a digital television tuner, and numerous types will work – both generic TV sticks and specialized ADS-B sticks (produced by FlightAware). Although both options work, the ADS-B sticks seem to perform a little better.
 
 ## Part 2 – Setup Balena and configure the device
 
+[![](https://www.balena.io/deploy.png)](https://dashboard.balena-cloud.com/deploy)
+
+or
+
  1. [Create a free Balena account](https://dashboard.balena-cloud.com/signup). During the process, you will be asked to upload your public SSH key. If you don't have a public SSH key yet, you can [create one](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
  2. Sign in to Balena and head over to the [*Applications*](https://dashboard.balena-cloud.com/apps) panel.
- 3. Create an application with the name of your choice, for the device type of your choice. In the dialog that appears, make sure to pick a *Default Device Type* that matches your receiver. I have tested this code with Raspberry Pi Zero and Raspberry Pi 3 B+, and both work well. If you want to use WiFi, specify the SSID and password here, too.
+ 3. Create an application with the name of your choice, for the device type of your choice. In the dialog that appears, make sure to pick a *Default Device Type* that matches your receiver. I have tested this code with Raspberry Pi Zero and Raspberry Pi 3 B+, and both work well. If you want to use WiFi, specify the SSID and password here, too. If your device comes up without an active connection to the internet, the `wifi-connect` container will create a network with a captive portal to connect to a local WiFi network. The username and password are `balena`/`balena` for the created hotspot.
  4. Balena will create an SD card image for you, and this will start downloading automatically after a few seconds. Flash the image to an SD-card using Balena's dedicated tool [balenaEtcher](https://www.balena.io/etcher/).
  5. Insert the SD card in your receiver, and connect it to your cabled network (unless you plan to use WiFi only, and configured that in step 3). 
  6. Power up the receiver.
@@ -162,5 +166,8 @@ It's similar to Dump1090, but Plane Finder adds 3D visualization and other nice 
 
 **Flightradar24 Status Page**
 Less visual than the two other options, Flightradar24's status page gives you high level statistics and a metrics about how your feeder is doing. Head to `YOURIP:8754` to check it out. When remote, open Balena's *Public Device URL* and add `/fr24feed/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/fr24feed/`
+
+## Part 7 - (Optional) Add a digital display
+balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. Ensure you have cloned this repository recursively (`git clone --recursive {{repository URL}}`). We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port are one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
 
 Enjoy!
