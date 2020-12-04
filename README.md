@@ -24,7 +24,7 @@ In addition to the Pi, you will need an RTL-SDR compatible USB dongle. The dongl
 
 ## Part 2 – Setup Balena and configure the device
 
-[![](https://www.balena.io/deploy.png)](https://dashboard.balena-cloud.com/deploy)
+[![Deploy with balena button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/ketilmo/balena-ads-b&defaultDeviceType=raspberrypi3)
 
 or
 
