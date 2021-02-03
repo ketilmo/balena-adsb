@@ -1,14 +1,16 @@
-version: "2"
-slug: "balena-ads-b"
 name: "ADS-B Flight Tracker"
 type: "sw.application"
+description: "Track the flight traffic over your head with a Raspberry Pi running balena and a cheap RTL-SDR USB dongle."
 assets:
-  - url: "https://github.com/ketilmo/balena-ads-b"
-    name: "repository"
-  - url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/logo.png"
-    name: "logo"
+  repository:
+    type: "blob.asset"
+    data:
+      url: "https://github.com/ketilmo/balena-ads-b"
+  logo:
+    type: "blob.asset"
+    data:
+      url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/logo.png"
 data:
-  description: "Track the flight traffic over your head with a Raspberry Pi running balena and a cheap RTL-SDR USB dongle."
   applicationConfigVariables:
     - RESIN_HOST_CONFIG_gpu_mem: 128
   defaultDeviceType: "raspberrypi3"
