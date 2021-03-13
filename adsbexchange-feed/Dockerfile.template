@@ -1,0 +1,15 @@
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
+LABEL maintainer="https://github.com/garethhowell"
+
+ENV RECEIVER_HOST=dump1090-fa
+ENV RECEIVER_PORT=30005
+
+RUN apt-get update && apt-get install -y --no-install-recommends socat \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+COPY start.sh /opt
+RUN chmod +x /opt/start.sh
+
+ENTRYPOINT ["/opt/start.sh"]
+
