@@ -3,9 +3,9 @@
 
 ![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
 
-**ADS-B Flight Tracker running on balena with support for Dump1090-fa, FlightAware, Flightradar24, Plane Finder, OpenSky Network, and AirNav RadarBox.**
+**ADS-B Flight Tracker running on balena with support for Dump1090-fa, FlightAware, Flightradar24, Plane Finder, OpenSky Network, AirNav RadarBox, and ADSB Exchange.**
 
-Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), and [AirNav RadarBox](https://www.radarbox.com/). In return, you will receive free premium accounts worth several hundred dollars/year!
+Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), [AirNav RadarBox](https://www.radarbox.com/) and [ADSB Exchange](https://adsbexchange.com). In return, you will receive free premium accounts worth several hundred dollars/year!
 
 👉🏻&nbsp;<a href="https://buttondown.email/balena-ads-b"> Subscribe to our newsletter</a>&nbsp;👈🏻 to stay updated on the latest development of balena ADS-B Flight Tracker.
 
@@ -38,8 +38,9 @@ This project is inspired by and has borrowed code from the following repos and f
  - https://github.com/wercsy/balena-ads-b
  - https://github.com/mikenye/
  - [https://discussions.flightaware.com/](https://discussions.flightaware.com/t/howto-install-piaware-4-0-on-debian-10-amd64-ubuntu-20-amd64-kali-2020-amd64-on-pc/69753/3)
+ - https://github.com/marcelstoer/docker-adsbexchange
 
-Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), [wercsy](https://github.com/wercsy/), [mikenye](https://github.com/mikenye/), and [abcd567a](https://github.com/abcd567a) for sharing!
+Thanks to [compujuckel](https://github.com/compujuckel/), [Glenn Stewart](https://bitbucket.org/inodes/), [wercsy](https://github.com/wercsy/), [mikenye](https://github.com/mikenye/), [abcd567a](https://github.com/abcd567a) and [marcelstoer](https://github.com/marcelstoer) for sharing!
 
 ## Part 1 – Build the receiver
 
@@ -226,8 +227,20 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
  8.  Next, head over to RadarBox' [Claim Your Raspberry Pi](https://www.radarbox.com/raspberry-pi/claim) page. Locate the input field named *Sharing Key,* and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
  9. Next, you might be asked to enter your feeder's location and altitude *above the ground.* Enter the same values that you entered in the `LAT` and `LON` variables earlier. When asked for the antenna's altitude, specify it i meters (or feet) *above the ground* – NOT above sea level as done previously. If you are not asked to enter this information, you can do it manually by clicking the *Edit* link under your receiver's ID on the left-hand side of the screen. 
  10. Finally, verify that RadarBox is receiving data from your receiver. You'll find your receiver by clicking on the *Account* menu at [radarbox.com](https://www.radarbox.com) , under the *Stations* accordion. 
- 
-## Part 8 – Exploring flight traffic locally on your device
+
+## Part 8 - Configure ADSB Exchange Feeder and MLAT
+ADSB Exchange requires very little in the way of setup. 
+All that you need to do is name the feeder and claim your IP on the ADSB Exchange site.
+
+1. Head back to the Balena dashboard and your device's page.
+Click on the *Device Variables*-button – *D(x)*. Add a variable named `ADSBEXCHANGE_RECEIVER_NAME` and give a suitable value (e.g. your location).
+2. Restart the *adsbexchange-feed* and *adsbexchange-mlat* applications under *Services* by clicking the "cycle" icon next to the service names.
+3. Next, wait a minute or two for the services to restart and head over to ADSB Exchange's 
+[Feeder Status](https://www.adsbexchange.com/myip/) page from a PC on the same network as the feeder.
+Verify that your feeder is shown as registered and that ADSB Exchange is receiving your feed and mlat data.
+
+
+## Part 9 – Exploring flight traffic locally on your device
 If the setup went well, you should now be feeding flight traffic data to several online services. In return for your efforts, you will receive access to the providers' premium services. But in addition to this, you can explore the data straight from your device, raw and unedited. And that's part of the magic, right?
 
 When you have local network access to your receiver, you can explore the data straight from the source. Start by opening your device page in balena console and locate the `IP ADDRESS` field, e.g. `10.0.0.10`. Then, add the desired port numbers specified further below.
@@ -243,7 +256,7 @@ It's similar to Dump1090, but Plane Finder adds 3D visualization and other nice 
 **Flightradar24 Status Page**
 Less visual than the two other options, Flightradar24's status page gives you high level statistics and a metrics about how your feeder is doing. Head to `YOURIP:8754` to check it out. When remote, open balena's *Public Device URL* and add `/fr24feed/` to the tail end of the URL, e.g. `https://6g31f15653bwt4y251b18c1daf4qw164.balena-devices.com/fr24feed/`
 
-## Part 9 - (Optional) Add a digital display
+## Part 10 - (Optional) Add a digital display
 balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. Ensure you have cloned this repository recursively (`git clone --recursive {{repository URL}}`). We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port are one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
 
 Enjoy!
