@@ -17,7 +17,7 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG DUMP1090_VERSION=v4.0
+ARG DUMP1090_VERSION=v5.0
 ARG TEMP_INSTALL="git build-essential cmake debhelper pkg-config libncurses5-dev libbladerf-dev libhackrf-dev liblimesuite-dev libusb-1.0-0-dev librtlsdr-dev apt-utils apt-transport-https dh-systemd"
 
 RUN apt update && \
