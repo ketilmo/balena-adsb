@@ -30,6 +30,9 @@ Contribute to the flight tracking community! Feed your local ADS-B data from an 
 <tr><td>
 <img height="24px" src="https://files.balena-cloud.com/images/raspberrypi4-64/2.65.0%2Brev1.prod/logo.svg" alt="raspberrypi4-64" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 4 Model B</td>
 </tr>
+<tr><td>
+<img height="24px" src="https://files.balena-cloud.com/images/raspberrypi400-64/2.65.0%2Brev2.prod/logo.svg" alt="raspberrypi4-400" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 400</td>
+</tr>
 </table>
 
 This project is inspired by and has borrowed code from the following repos and forum threads:  

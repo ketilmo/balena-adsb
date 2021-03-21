@@ -17,6 +17,7 @@ data:
   supportedDeviceTypes:
     - "raspberrypi3"
     - "raspberrypi4-64"
+    - "raspberrypi400-64"
     - "fincm3"
     - "jetson-nano"
     - "jetson-nano-2gb-devkit"
