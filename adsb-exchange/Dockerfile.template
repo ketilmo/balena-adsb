@@ -1,0 +1,91 @@
+FROM balenalib/%%BALENA_ARCH%%-debian:buster AS base
+LABEL maintainer="https://github.com/ketilmo"
+
+EXPOSE 30154 30157 31003 
+
+ENV ADSB_EXCHANGE_SITENAME=
+ENV ADSB_EXCHANGE_UUID=
+ENV LAT=
+ENV LON=
+ENV ALT=
+ENV RECEIVER_HOST=dump1090-fa
+ENV RECEIVER_PORT=30005
+ENV DUMP978_ENABLED=false
+
+ARG PERM_INSTALL="curl socat gzip python3 netcat dnsutils uuid-runtime zlib1g jq inotify-tools perl tini gettext-base"
+
+RUN apt update && \
+	apt install -y $PERM_INSTALL && \
+	apt clean && apt autoclean && apt autoremove && \
+	rm -rf /var/lib/apt/lists/*
+
+FROM base AS buildstep
+
+ARG READADSB_VERSION=v3.8.1
+ARG TEMP_INSTALL="git build-essential debhelper	python3-dev	python3-pip	python3-wheel python3-setuptools libncurses5-dev python-distutils-extra zlib1g-dev" 
+
+WORKDIR /tmp
+
+RUN apt update && \
+	apt install -y $TEMP_INSTALL && \
+	git clone --depth 1 --single-branch https://github.com/adsbxchange/mlat-client.git && \
+	cd mlat-client && \
+	git checkout $(git ls-remote "https://github.com/adsbxchange/mlat-client.git" | grep HEAD | cut -f1) && \
+	dpkg-buildpackage -b -uc
+
+WORKDIR /tmp
+
+RUN git clone --single-branch https://github.com/adsbxchange/readsb.git && \
+	cd readsb && \
+	git fetch --all --tags && \
+	git checkout tags/${READADSB_VERSION} && \
+	make -j3 AIRCRAFT_HASH_BITS=12
+
+WORKDIR /tmp
+
+RUN git clone https://github.com/adsbxchange/adsbexchange-stats.git
+
+RUN git clone --depth 1 https://github.com/adsbxchange/adsbexchange-978 /usr/local/share/adsbexchange-978/git && \
+	cd /usr/local/share/adsbexchange-978/git && \
+	git checkout -f master && \
+	git fetch && \
+	git reset --hard origin/master
+
+WORKDIR /tmp
+
+RUN git clone --single-branch --depth 1 --branch master https://github.com/adsbxchange/uat2esnt.git && \
+	cd uat2esnt && \
+	make -j3 uat2esnt
+
+FROM base AS release
+
+RUN mkdir -p /usr/local/share/adsbexchange-978/
+
+COPY --from=buildstep /tmp/mlat-client_*_*.deb /tmp/
+COPY --from=buildstep /tmp/readsb/readsb /usr/bin/feed-adsbx
+COPY --from=buildstep /tmp/adsbexchange-stats/adsbexchange-showurl /usr/local/bin/adsbexchange-showurl
+COPY --from=buildstep /tmp/adsbexchange-stats/json-status /usr/local/share/adsbexchange-stats/
+COPY --from=buildstep /tmp/adsbexchange-stats/create-uuid.sh /usr/local/share/adsbexchange-stats/
+COPY --from=buildstep /tmp/uat2esnt/uat2esnt /usr/local/share/adsbexchange-978
+COPY convert.sh /usr/local/share/adsbexchange-978/
+COPY start.sh /
+COPY create-sitename.sh /
+COPY adsbx-uuid.tpl /boot/
+
+WORKDIR /tmp
+
+RUN chmod +x /usr/local/bin/adsbexchange-showurl && \
+	chmod +x /usr/local/share/adsbexchange-stats/json-status && \
+	chmod +x /usr/local/share/adsbexchange-stats/create-uuid.sh && \
+	dpkg -i mlat-client_*_*.deb && \
+	mkdir -p /run/dump978-fa && \
+	mkdir -p /run/skyaware978 && \
+	chmod +x /start.sh && \
+	chmod +x /usr/local/share/adsbexchange-978/convert.sh && \
+	chmod +x /create-sitename.sh && \
+	mkdir -p /run/adsbexchange-feed && \
+	mkdir -p /run/adsbexchange-stats && \
+	mkdir -p /run/adsbexchange-978 && \
+	rm -rf /tmp/*
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]
