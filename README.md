@@ -59,18 +59,18 @@ In addition to the device, you will need an RTL-SDR compatible USB dongle. The d
 or
 
  1. [Create a free balena account](https://dashboard.balena-cloud.com/signup). During the process, you will be asked to upload your public SSH key. If you don't have a public SSH key yet, you can [create one](https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent).
- 2. Sign in to Balena and head over to the [*Applications*](https://dashboard.balena-cloud.com/apps) panel.
- 3. Create an application with the name of your choice, for the device type of your choice. In the dialog that appears, make sure to pick a *Default Device Type* that matches your device. If you want to use WiFi (and your device supports it), specify the SSID and password here, too. (If your device comes up without an active connection to the Internet, the `wifi-connect` container will create a network with a captive portal to connect to a local WiFi network. The SSID for the created hotspot is `balenaWiFi`, and the password is`balenaWiFi`. When connected, visit `http://192.168.42.1:8181/` in your web browser to setup the connection.
+ 2. Sign in to Balena and head over to the [*Fleets*](https://dashboard.balena-cloud.com/fleets) panel.
+ 3. Create a fleet with the name of your choice, for the device type of your choice. In the dialog that appears, make sure to pick a *Default Device Type* that matches your device. If you want to use WiFi (and your device supports it), specify the SSID and password here, too. (If your device comes up without an active connection to the Internet, the `wifi-connect` container will create a network with a captive portal to connect to a local WiFi network. The SSID for the created hotspot is `balenaWiFi`, and the password is`balenaWiFi`. When connected, visit `http://192.168.42.1:8181/` in your web browser to setup the connection.
  4. balena will create an SD card image for you, and this will start downloading automatically after a few seconds. Flash the image to an SD-card using balena's dedicated tool [balenaEtcher](https://www.balena.io/etcher/).
  5. Insert the SD card in your receiver, and connect it to your cabled network (unless you plan to use WiFi only, and configured that in step 3). 
  6. Power up the receiver.
- 7. From the balena dashboard, navigate to the application you just created. Within a few minutes, a new device with an automatically generated name should appear. Click on it to open it.
+ 7. From the balena dashboard, navigate to the fleet you just created. Within a few minutes, a new device with an automatically generated name should appear. Click on it to open it.
  8. Rename your device to your taste by clicking on the pencil icon next to the current device name.
- 9. Next, we'll configure the receive with its geographic location. Unless you happen to know this by heart, you can use [Google Maps](https://maps.google.com) to find it. When you click on your desired location on the map, the corresponding coordinates should appear. We are looking for the decimal coordinates, which should look similar to this: 60.395429, 5.325127.
- 10. Back in the balena console, verify that you have opened up the view for your desired device. Click on the *Device Variables*-button – *D(x)*. Add the following two variables: `LAT` *(Receiver Latitude)*, e.g. with a value such as `60.12345` and `LON` *(Receiver Longitude)*, e.g. with a value such as `4.12345`.
+ 9. Next, we'll configure the receiver with its geographic location. Unless you happen to know this by heart, you can use [Google Maps](https://maps.google.com) to find it. When you click on your desired location on the map, the corresponding coordinates should appear. We are looking for the decimal coordinates, which should look similar to this: 60.395429, 5.325127.
+ 10. Back in the balena console, verify that you have opened up the view for your desired device. Click on the *Device Variables*-button. Add the following two variables: `LAT` *(Receiver Latitude)*, e.g. with a value such as `60.12345` and `LON` *(Receiver Longitude)*, e.g. with a value such as `4.12345`.
  11. Now, you're going to enter the receiver's altitude in *meters* above sea level in a new variable named `ALT`. If you don't know the altitude, you can find it using [one of several online services](https://www.maps.ie/coordinates.html). If your antenna is mounted above ground level, remember to add the approximate number of corresponding meters.
  12. Almost there! Next, we are going to push this code to your device through the balena cloud. Head into your terminal and clone this repository to your local computer: `git clone git@github.com:ketilmo/balena-ads-b.git`
- 13. Add a balena remote to your newly created local Git repo. You'll find the exact command you need for this at the Application page in your balena dashboard. It should look something like this: `git remote add balena your_username@git.balena-cloud.com:your_username/your_application_name.git`
+ 13. Add a balena remote to your newly created local Git repo. You'll find the exact command you need for this at the fleet page in your balena dashboard. It should look something like this: `git remote add balena your_username@git.balena-cloud.com:your_username/your_fleet_name.git`
  14. Push the code to Balena's servers by typing `git push balena master`. 
  15. Now, wait while the Docker containers build on balena's servers. If the process is successful, you will see a beautiful piece of ASCII art depicting a unicorn:
 <pre>
@@ -107,7 +107,7 @@ or
 If you have previously set up a standalone FlightAware receiver, and want to port it to balena, you only have to do the following steps:
 
  1. Head back to your device's page in the balena dashboard and click on the *Device Variables*-button – *D(x)*. Add the following variable: `FLIGHTAWARE_FEEDER_ID`, then paste your *Unique Identifier* key, eg. `134cdg7d-7533-5gd4-d31d-r31r52g63v12`. The ID can be found on the *My ADS-B* section at the FlightAware website.
- 2. From the balena dashboard, restart the *piaware* application under *Services* by clicking the "cycle" icon next to the service name.
+ 2. From the balena dashboard, restart the *piaware* service under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new FlightAware receiver
 If you have not previously set up a FlightAware receiver that you want to reuse, do the following steps:
@@ -116,7 +116,7 @@ If you have not previously set up a FlightAware receiver that you want to reuse,
  2. Once the terminal prompt appears, enter `/getid.sh` (including the leading slash), then press return.
  3. If everything goes according to plan, your FlightAware feeder id will soon appear. Copy it.
  4. Click on the  _Device Variables_-button –  _D(x)_  in the left-hand menu. Add a variable named  `FLIGHTAWARE_FEEDER_ID`  and paste the value from the previous step, e.g.  `134cdg7d-7533-5gd4-d31d-r31r52g63v12`.
- 5. Go back to your device's *Summary* page. Restart the  _piaware_  application under  _Services_  by clicking the “cycle” icon next to the service name.
+ 5. Go back to your device's *Summary* page. Restart the *piaware* service under *Services* by clicking the “cycle” icon next to the service name.
  6. Register [a new account](https://flightaware.com/account/join/) at FlightAware, then login using your newly created credentials.
  7. **Important:** While being connected to *the same network* (either cabled or wireless) as your receiver is connected to, head to FlightAware's *[Claim Receiver](https://flightaware.com/adsb/piaware/claim)* page.
  8. Check if any receivers show up under the *Linked PiAware Receivers* heading. (If not, wait a few minutes and click the *Check Again for my PiAware*-button.) Hopefully, your receiver is now visible under the *Linked PiAware Receivers* header.
@@ -132,7 +132,7 @@ If you have not previously set up a FlightAware receiver that you want to reuse,
 If you have previously set up a Flightradar24 receiver and want to port it to balena, you only have to do the following steps:
 
  1. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `FR24_KEY` and paste the value of your existing Flightradar24 key, e.g. `dv4rrt2g122g7233`. The key is located in the Flightradar24 config file, which is usually found here: `/etc/fr24feed.ini`. (If you are unable to locate your old key, retrieve or create a new one it by following the steps in alternative B.)
- 2. Restart the *fr24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 2. Restart the *fr24feed* service under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new Flightradar24 receiver
 If you have not previously set up a Flightradar24 receiver that you want to reuse, do the following steps:
@@ -160,7 +160,7 @@ If you have not previously set up a Flightradar24 receiver that you want to reus
  21. At the prompt, type `cat /etc/fr24feed.ini`. Your Flightradar24 settings will be displayed. 
  22. Find the line starting with `fr24key=`, and copy the string between the quotes. It will look something like this: `dv4rrt2g122g7233`.
  23. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `FR24_KEY` and paste the value from the previous step, e.g. `dv4rrt2g122g7233`.
- 24. Restart the *fr24feed* application under *Services* by clicking the "cycle" icon next to the service name.
+ 24. Restart the *fr24feed* service under *Services* by clicking the "cycle" icon next to the service name.
  25. Head over to [Flightradar24's website](https://www.flightradar24.com/premium/signup) and create a new *Basic* account, using the *exact same email address* that you filled in in step 5.
  26. Shortly after your receiver starts feeding data to Flightradar24, your *Basic* account will be upgraded to their *Business* plan. Enjoy!
 
@@ -169,7 +169,7 @@ If you have not previously set up a Flightradar24 receiver that you want to reus
 If you have previously set up a Plane Finder receiver and want to port it to balena, you only have to do the following steps:
 
  1. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of your existing Plane Finder key, e.g. `7e3q8n45wq369`. You can find your key at Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page.
- 2. On your device's page in the balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
+ 2. On your device's page in the balena dashboard, restart the *planefinder* service under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new Plane Finder receiver
 If you have not previously set up a Plane Finder receiver that you want to reuse, do the following steps:
@@ -180,7 +180,7 @@ If you have not previously set up a Plane Finder receiver that you want to reuse
  4. Fill in the form to generate a Plane Finder share code. Use the same email address as you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds, it should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
  5. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
  6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
- 7. On your device's page in the Balena dashboard, restart the *planefinder* application under *Services* by clicking the "cycle" icon next to the service name.
+ 7. On your device's page in the Balena dashboard, restart the *planefinder* service under *Services* by clicking the "cycle" icon next to the service name.
 
 ## Part 6 – Configure OpenSky Network
 ### Alternative A: Port an existing OpenSky Network receiver
@@ -189,20 +189,20 @@ If you have previously set up a OpenSky Network receiver and want to port it to 
  1. Head back to the balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*.
  2. Add a variable named `OPENSKY_USERNAME` and paste your OpenSky Network username, e.g. `JohnDoe123`. You can find your username on your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* page.
  3. Add a variable named `OPENSKY_SERIAL` and paste the value of your existing OpenSky Network serial number, e.g. `1663421823`. You can find your serial your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* page.
- 4. On your device's page in the balena dashboard, restart the *opensky-network* application under *Services* by clicking the "cycle" icon next to the service name.
+ 4. On your device's page in the balena dashboard, restart the *opensky-network* service under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new OpenSky Network receiver
 If you have not previously set up a OpenSky Network receiver that you want to reuse, do the following steps:
 
  1. Register a new [OpenSky Network account](https://opensky-network.org/index.php?option=com_users&view=registration). Make sure to activate it using the email that's sent to you. Take note of your username, you will need it soon.
  2. Head back to your device's page on the balena dashboard. Click on the  _Device Variables_-button –  _D(x)_  in the left-hand menu. Add a variable named `OPENSKY_USERNAME` and populate it with your newly created OpenSky Username, e.g.  `JohnDoe123`.
- 3. Head back to your device's *Summary* page. Restart the *opensky-network* application under *Services* by clicking the "cycle" icon next to the service name. Wait for the service to finish restarting.
+ 3. Head back to your device's *Summary* page. Restart the *opensky-network* service under *Services* by clicking the "cycle" icon next to the service name. Wait for the service to finish restarting.
  4. Inside the *Terminal* section, click *Select a target*, then *opensky-network*, and finally *Start terminal session*.
  5. This will open a terminal which lets you interact directly with your OpenSky Network container.
  6. Once the terminal prompt appears, enter `/getserial.sh` (including the leading slash), then press return.
  7. If everything goes according to plan, your OpenSky Network serial number will soon appear. Copy it.
  8. Click on the  _Device Variables_-button –  _D(x)_  in the left-hand menu. Add a variable named  `OPENSKY_SERIAL`  and paste the value from the previous step, e.g.  `1267385439`.
- 9. Go back to your device's *Summary* page. Restart the  _opensky-network_  application under  _Services_  by clicking the “cycle” icon next to the service name.
+ 9. Go back to your device's *Summary* page. Restart the  _opensky-network_  service under  _Services_  by clicking the “cycle” icon next to the service name.
  10. Head over to your OpenSky Network *[Dashboard](https://opensky-network.org/my-opensky)* and verify that your receiver shows up and feeds data.
 
 ## Part 7 – Configure RadarBox
@@ -211,7 +211,7 @@ If you have not previously set up a OpenSky Network receiver that you want to re
 If you have previously set up a RadarBox receiver and want to port it to Balena, you only have to do the following steps:
 
  1. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button – *D(x)*. Add a variable named `RADARBOX_KEY` and paste the value of your existing RadarBox key, e.g. `546b69e69b4671a742b82b10c674cdc1`. To get your key, issue the following command at your current RadarBox device: `sudo rbfeeder --showkey --no-start`.
- 2. Restart the *radarbox* application under *Services* by clicking the "cycle" icon next to the service name.
+ 2. Restart the *radarbox* service under *Services* by clicking the "cycle" icon next to the service name.
 
 ### Alternative B: Setup a new RadarBox receiver
 If you have not previously set up a RadarBox receiver that you want to reuse, do the following steps:
@@ -222,7 +222,7 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
  4. This will open a terminal which lets you interact directly with your RadarBox container.
  5. At the prompt, enter `/showkey.sh`. Your RadarBox key will be displayed, and will look similar to this: `546b69e69b4671a742b82b10c674cdc1`.
  6. Click on the *Device Variables*-button – *D(x)* in the left-hand menu. Add a variable named `RADARBOX_KEY` and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
- 7. Restart the *radarbox* application under *Services* by clicking the "cycle" icon next to the service name.
+ 7. Restart the *radarbox* service under *Services* by clicking the "cycle" icon next to the service name.
  8.  Next, head over to RadarBox' [Claim Your Raspberry Pi](https://www.radarbox.com/raspberry-pi/claim) page. Locate the input field named *Sharing Key,* and paste the value from step 5, e.g. `546b69e69b4671a742b82b10c674cdc1`.
  9. Next, you might be asked to enter your feeder's location and altitude *above the ground.* Enter the same values that you entered in the `LAT` and `LON` variables earlier. When asked for the antenna's altitude, specify it i meters (or feet) *above the ground* – NOT above sea level as done previously. If you are not asked to enter this information, you can do it manually by clicking the *Edit* link under your receiver's ID on the left-hand side of the screen. 
  10. Finally, verify that RadarBox is receiving data from your receiver. You'll find your receiver by clicking on the *Account* menu at [radarbox.com](https://www.radarbox.com) , under the *Stations* accordion. 
