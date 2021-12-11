@@ -21,35 +21,34 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG READADSB_VERSION=v3.8.1
-ARG TEMP_INSTALL="git build-essential debhelper	python3-dev	python3-pip	python3-wheel python3-setuptools libncurses5-dev python-distutils-extra zlib1g-dev" 
+ARG READSB_COMMIT=8468e346408b3c79ce16cf33e86640d03727fc4f
+ARG MLAT_TAG=v0.3.9
+ARG TEMP_INSTALL="git build-essential debhelper libncurses5-dev zlib1g-dev"
 
 WORKDIR /tmp
 
 RUN apt update && \
-	apt install -y $TEMP_INSTALL && \
-	git clone --depth 1 --single-branch https://github.com/adsbxchange/mlat-client.git && \
+	apt install -y $TEMP_INSTALL
+
+RUN git clone --depth 1 --branch $MLAT_TAG https://github.com/adsbxchange/mlat-client.git && \
 	cd mlat-client && \
-	git checkout $(git ls-remote "https://github.com/adsbxchange/mlat-client.git" | grep HEAD | cut -f1) && \
-	dpkg-buildpackage -b -uc
+    python3 -m venv /tmp/venv && \
+    /tmp/venv/bin/python3 setup.py build && \
+    /tmp/venv/bin/python3 setup.py install
 
 WORKDIR /tmp
 
 RUN git clone --single-branch https://github.com/adsbxchange/readsb.git && \
 	cd readsb && \
-	git fetch --all --tags && \
-	git checkout tags/${READADSB_VERSION} && \
-	make -j3 AIRCRAFT_HASH_BITS=12
+	git checkout $READSB_VERSION && \
+	make -j3 AIRCRAFT_HASH_BITS=14
 
 WORKDIR /tmp
 
 RUN git clone https://github.com/adsbxchange/adsbexchange-stats.git
 
 RUN git clone --depth 1 https://github.com/adsbxchange/adsbexchange-978 /usr/local/share/adsbexchange-978/git && \
-	cd /usr/local/share/adsbexchange-978/git && \
-	git checkout -f master && \
-	git fetch && \
-	git reset --hard origin/master
+	cd /usr/local/share/adsbexchange-978/git
 
 WORKDIR /tmp
 
@@ -61,7 +60,9 @@ FROM base AS release
 
 RUN mkdir -p /usr/local/share/adsbexchange-978/
 
-COPY --from=buildstep /tmp/mlat-client_*_*.deb /tmp/
+RUN mkdir -p /usr/local/share/adsbexchange/venv/
+COPY --from=buildstep /tmp/venv/ /usr/local/share/adsbexchange/venv/
+
 COPY --from=buildstep /tmp/readsb/readsb /usr/bin/feed-adsbx
 COPY --from=buildstep /tmp/adsbexchange-stats/adsbexchange-showurl /usr/local/bin/adsbexchange-showurl
 COPY --from=buildstep /tmp/adsbexchange-stats/json-status /usr/local/share/adsbexchange-stats/
@@ -77,7 +78,6 @@ WORKDIR /tmp
 RUN chmod +x /usr/local/bin/adsbexchange-showurl && \
 	chmod +x /usr/local/share/adsbexchange-stats/json-status && \
 	chmod +x /usr/local/share/adsbexchange-stats/create-uuid.sh && \
-	dpkg -i mlat-client_*_*.deb && \
 	mkdir -p /run/dump978-fa && \
 	mkdir -p /run/skyaware978 && \
 	chmod +x /start.sh && \

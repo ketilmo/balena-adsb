@@ -51,7 +51,7 @@ echo " "
 
 # Start adsbexchange-feed and put it in the background.
 /usr/bin/feed-adsbx --net --net-only --debug=n --quiet --write-json /run/adsbexchange-feed --net-beast-reduce-interval 0.5 --net-connector feed.adsbexchange.com,30004,beast_reduce_out,feed.adsbexchange.com,64004 --net-heartbeat 60 --net-ro-size 1280 --net-ro-interval 0.2 --net-ro-port 0 --net-sbs-port 0 --net-bi-port 30154 --net-bo-port 0 --net-ri-port 0 --net-connector "$RECEIVER_HOST","$RECEIVER_PORT",beast_in --lat "$LAT" --lon "$LON" 2>&1 | stdbuf -o0 sed --unbuffered '/^$/d' |  awk -W interactive '{print "[feed-adsbx]     " $0}' &
-/usr/bin/mlat-client --input-type dump1090 --no-udp --input-connect "$RECEIVER_HOST":"$RECEIVER_PORT" --server feed.adsbexchange.com:31090 --user "$ADSB_EXCHANGE_SITENAME" --lat "$LAT" --lon "$LON" --alt "$ALT" --results beast,connect,"$RECEIVER_HOST":30104 --results basestation,listen,31003 --results beast,listen,30157 2>&1 | stdbuf -o0 sed --unbuffered '/^$/d' | awk -W interactive '{print "[mlat-client]    "  $0}' &
+/usr/local/share/adsbexchange/venv/bin/mlat-client --input-type dump1090 --no-udp --input-connect "$RECEIVER_HOST":"$RECEIVER_PORT" --server feed.adsbexchange.com:31090 --user "$ADSB_EXCHANGE_SITENAME" --lat "$LAT" --lon "$LON" --alt "$ALT" --results beast,connect,"$RECEIVER_HOST":30104 --results basestation,listen,31003 --results beast,listen,30157 2>&1 | stdbuf -o0 sed --unbuffered '/^$/d' | awk -W interactive '{print "[mlat-client]    "  $0}' &
 /usr/local/share/adsbexchange-stats/json-status 2>&1 | stdbuf -o0 sed --unbuffered '/^$/d' | awk -W interactive '{print "[json-status]    " $0}' | grep -v 'jq: error' &
 
 
