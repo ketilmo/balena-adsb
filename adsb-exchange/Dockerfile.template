@@ -12,7 +12,7 @@ ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
 ENV DUMP978_ENABLED=false
 
-ARG PERM_INSTALL="curl socat gzip python3 netcat dnsutils uuid-runtime zlib1g jq inotify-tools perl tini gettext-base"
+ARG PERM_INSTALL="curl socat gzip python3 python3-venv netcat dnsutils uuid-runtime zlib1g jq inotify-tools perl tini gettext-base"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -23,7 +23,7 @@ FROM base AS buildstep
 
 ARG READSB_COMMIT=8468e346408b3c79ce16cf33e86640d03727fc4f
 ARG MLAT_TAG=v0.3.9
-ARG TEMP_INSTALL="git build-essential debhelper libncurses5-dev zlib1g-dev"
+ARG TEMP_INSTALL="git build-essential debhelper libncurses5-dev zlib1g-dev python3-dev"
 
 WORKDIR /tmp
 
@@ -32,9 +32,9 @@ RUN apt update && \
 
 RUN git clone --depth 1 --branch $MLAT_TAG https://github.com/adsbxchange/mlat-client.git && \
 	cd mlat-client && \
-    python3 -m venv /tmp/venv && \
-    /tmp/venv/bin/python3 setup.py build && \
-    /tmp/venv/bin/python3 setup.py install
+    python3 -m venv /usr/local/share/adsbexchange/venv/ && \	
+    /usr/local/share/adsbexchange/venv/bin/python3 setup.py build && \	
+    /usr/local/share/adsbexchange/venv/bin/python3 setup.py install
 
 WORKDIR /tmp
 
@@ -61,7 +61,7 @@ FROM base AS release
 RUN mkdir -p /usr/local/share/adsbexchange-978/
 
 RUN mkdir -p /usr/local/share/adsbexchange/venv/
-COPY --from=buildstep /tmp/venv/ /usr/local/share/adsbexchange/venv/
+COPY --from=buildstep /usr/local/share/adsbexchange/venv/ /usr/local/share/adsbexchange/venv/
 
 COPY --from=buildstep /tmp/readsb/readsb /usr/bin/feed-adsbx
 COPY --from=buildstep /tmp/adsbexchange-stats/adsbexchange-showurl /usr/local/bin/adsbexchange-showurl
