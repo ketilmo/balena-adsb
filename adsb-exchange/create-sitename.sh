@@ -7,7 +7,7 @@ echo " "
 read INPUT_USERNAME
 
 # Make sure sitename is compliant
-NOSPACENAME="$(echo -n -e "${ADSBEXCHANGEUSERNAME}" | tr -c '[a-zA-Z0-9]_\- ' '_')"
+NOSPACENAME="$(echo -n -e "$INPUT_USERNAME" | tr -c '[a-zA-Z0-9]_\- ' '_')"
 
 echo " "
 echo "Please add the site name below to a balena environment variable named ADSB_EXCHANGE_SITENAME"
