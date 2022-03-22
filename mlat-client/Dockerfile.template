@@ -18,7 +18,7 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG MLAT_CLIENT_VERSION=v0.2.11
+ARG MLAT_CLIENT_VERSION=v0.2.12
 ARG TEMP_INSTALL="build-essential debhelper python3-dev python-distutils-extra git init-system-helpers" 
 
 RUN apt update && \

@@ -15,7 +15,7 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG DUMP978_VERSION=v7.1
+ARG DUMP978_VERSION=v7.2
 ARG TEMP_INSTALL="build-essential cmake git debhelper pkg-config libboost-system-dev libboost-regex-dev libusb-1.0-0-dev libboost-filesystem-dev libboost-program-options-dev libsoapysdr-dev librtlsdr-dev dh-systemd"  
 
 RUN apt update && \
