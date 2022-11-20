@@ -19,7 +19,7 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG MLAT_TAG=v0.3.9
+ARG MLAT_TAG=v0.4.2
 ARG TEMP_INSTALL="build-essential debhelper python3-dev git" 
 
 RUN apt update && \
