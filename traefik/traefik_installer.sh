@@ -9,7 +9,7 @@ if [ "$arch" = "arm64" ]; then
 elif [ "$arch" = "amd64" ]; then 
 	traefik_arch="amd64"
 else 
-	traefik_arch="armv5" 
+	traefik_arch="armv6" 
 fi
 
 traefik_packet="traefik_v${TRAEFIK_VERSION}_linux_$traefik_arch.tar.gz"
