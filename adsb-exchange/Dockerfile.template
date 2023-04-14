@@ -21,7 +21,7 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-ARG READSB_COMMIT=a25f8ea9c8427ad1bea82f244b7967ac8cd3153f
+ARG READSB_COMMIT=f535e517996ad04ce8126a58757a9b91a82fe542
 ARG MLAT_TAG=v0.4.2
 ARG TEMP_INSTALL="git build-essential debhelper libncurses5-dev zlib1g-dev python3-dev libzstd-dev"
 
