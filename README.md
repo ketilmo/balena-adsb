@@ -230,7 +230,7 @@ If you have not previously set up a Flightradar24 receiver that you want to reus
  14. When asked for your receiver's IP address/hostname, enter `dump1090-fa`.
  15. Next, enter the data port number: `30005`.
  16. Type `no` to disable the RAW data feed on port 30334.
- 17. Type `no` to disable the Basestation data feed on port 30003.
+ 17. Type `no` to disable the BaseStation data feed on port 30003.
  18. Enter `0` to disable log file writing.
  19. When asked for a log file path, just hit return.
  20. The configuration will now be submitted, and you will be redirected back to the terminal.
@@ -316,22 +316,22 @@ If you have not previously set up a RadarBox receiver that you want to reuse, do
 [Feeder Status](https://www.adsbexchange.com/myip/) page from a PC on the same network as the feeder. Verify that your feeder is shown as registered and that ADSB Exchange is receiving your feed and MLAT data. You can also verify your feeder's performance at the [ADSB Exchange Feeder Map](https://map.adsbexchange.com/mlat-map/) by searching for your site name.
 
 # Part 9 – Configure UAT (Optional and US only) 
-***Please note:** The following instructions involve making low-level changes to RTLSDR USB sticks, such as changing the serial numbers. Proceed with caution, and only if you are comfortable with the steps involved. All changes made are at your own risk.*
+***Please note:** The following instructions involve making low-level changes to RTL-SDR USB sticks, such as changing the serial numbers. Proceed with caution, and only if you are comfortable with the steps involved. All changes made are at your own risk.*
 
-In the United States, aircraft can use either the ADS-B standard, which transmits at a frequency of 1090 MHz or the UAT protocol, which transmits at 978 MHz. If you live in the US and have an extra RTLSDR dongle, you can track the UAT and ADS-B traffic. Please note that the blue FlightAware USB devices should only be used for ADS-B traffic, as they have an integrated filter optimized explicitly for the 1090 MHz frequencies. The orange FlightAware USB devices work well for tracking UAT traffic.
+In the United States, aircraft can use either the ADS-B standard, which transmits at a frequency of 1090 MHz or the UAT protocol, which transmits at 978 MHz. If you live in the US and have an extra RTL-SDR dongle, you can track the UAT and ADS-B traffic. Please note that the blue FlightAware USB devices should only be used for ADS-B traffic, as they have an integrated filter optimized explicitly for the 1090 MHz frequencies. The orange FlightAware USB devices work well for tracking UAT traffic.
 
-1. Make sure you only have one RTLSDR stick connected to your device before executing the following steps. The connected stick should be used for regular ADS-B 1090 MHz feeding. 
+1. Make sure you only have one RTL-SDR stick connected to your device before executing the following steps. The connected stick should be used for regular ADS-B 1090 MHz feeding. 
 2. Head to your device's *Summary* page. Click on the Device Variables-button in the left-hand menu. Add a variable named `DISABLED_SERVICES` and populate it with the values `dump1090-fa,dump978-fa`.
 3. From the *Summary* page, inside the *Terminal* section, click *Select a target*, then *dump1090-fa*, and finally *Start terminal session*. This will open a terminal that lets you interact directly with your PiAware container.
 4. Once the terminal prompt appears, enter `/add-serial-1090.sh`, then press return. 
 5. Type `YES`, followed by return, to change your dongle's serial number. Verify that the process completes successfully.
 6. Click on the *Device Variables*-button in the left-hand menu. Add a new variable named `DUMP1090_DEVICE` and set its value to `00001090`.
-7. Shut down your device. When it's powered off, remove the first RTLSDR stick from the Pi.
-8. Insert the second RTLSDR stick (the one used for UAT), leaving the first stick disconnected. Power on your device.
+7. Shut down your device. When it's powered off, remove the first RTL-SDR stick from the Pi.
+8. Insert the second RTL-SDR stick (the one used for UAT), leaving the first stick disconnected. Power on your device.
 9. Head to your device's *Summary* page. Wait for all containers to come up with the status *Running*. Inside the *Terminal* section, click *Select a target*, then *dump978-fa*, and finally *Start terminal session*.
 10. Once the terminal prompt appears, enter `/add-serial-978.sh`, then press return.
 11. Type `YES`, followed by return, to change your dongle's serial number. Verify that the process completes successfully.
-12. Shut down your device. When it's powered off, connect both RTLSDR sticks.
+12. Shut down your device. When it's powered off, connect both RTL-SDR sticks.
 13. Click on the *Device Variables* button in the left-hand menu. Delete the `DISABLED_SERVICES` variable.
 14. Add a new variable named `UAT_ENABLED` and assign it the value `true`.
 15. Power on the device. You should now be feeding ADS-B and UAT data simultaneously to the services that support it (FlightAware, RadarBox and ADSB-Exchange).
@@ -361,7 +361,7 @@ If you live in the US and have configuered UAT feeding, you can explore the data
 
 # Part 12 – Advanced configuration
 ## Disabling specific services
-You can disable any of the balena-ads-b services by creating a *Device Variable* named `DISABLED_SERVICES` with the services you want to disable as comma-separated values. For example, if you want to disable the dump1090fa service, you set the `DISABLED_SERVICES` variable to `dump1090fa`. If you want to disable the dump1090fa and kiosk services, you set the `DISABLED_SERVICES` variable to `dump1090fa, piaware`.
+You can disable any of the balena-ads-b services by creating a *Device Variable* named `DISABLED_SERVICES` with the services you want to disable as comma-separated values. For example, if you want to disable the dump1090fa service, you set the `DISABLED_SERVICES` variable to `dump1090fa`. If you want to disable the dump1090fa and piaware services, you set the `DISABLED_SERVICES` variable to `dump1090fa, piaware`.
 
 **Please note:** Due to how these services are integrated, it's not currently possible to disable the `wifi-connect` and `kiosk` services.
 
