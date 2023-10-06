@@ -145,11 +145,11 @@ or
  10. Back in the balena console, verify that you have opened the view for your desired device. Click on the *Device Variables*-button. Add the following two variables: `LAT` *(Receiver Latitude)*, e.g. with a value such as `60.12345` and `LON` *(Receiver Longitude)*, e.g. with a value such as `4.12345`.
  11. Now, you're going to enter the receiver's altitude in *meters* above sea level in a new variable named `ALT`. If you need to find the altitude, you can find it using [one of several online services](https://www.maps.ie/coordinates.html). Remember to add the approximate number of corresponding meters if your antenna is mounted above ground level.
  12. Almost there! Next, we will push this code to your device through the balena cloud. We'll do that using the [balena CLI](https://github.com/balena-io/balena-cli). Follow the [official instructions](https://github.com/balena-io/balena-cli/blob/master/INSTALL.md) to download and install the CLI for your platform of choice.
- 14. Head into your terminal and log in to balena with the following command: `balena login`. Then follow the instructions on the screen.
- 15. Next, clone the balena-ads-b repository to your local computer: `git clone git@github.com:ketilmo/balena-ads-b.git`. If you want to make changes to the repo, you can also fork it.
- 16. Head into the folder of the newly cloned repo by typing `cd balena-ads-b`.
- 17. Do you remember your fleet name from earlier? Good. Now, we are ready to push the applications to balena's servers by typing `balena push YOUR–FLEET–NAME–HERE`.
- 18. Now, wait while the Docker containers build on balena's servers. If the process is successful, you will see a beautiful piece of ASCII art depicting a unicorn right in your terminal window:
+ 13. Head into your terminal and log in to balena with the following command: `balena login`. Then follow the instructions on the screen.
+ 14. Next, clone the balena-ads-b repository to your local computer: `git clone git@github.com:ketilmo/balena-ads-b.git`. If you want to make changes to the repo, you can also fork it.
+ 15. Head into the folder of the newly cloned repo by typing `cd balena-ads-b`.
+ 16. Do you remember your fleet name from earlier? Good. Now, we are ready to push the applications to balena's servers by typing `balena push YOUR–FLEET–NAME–HERE`.
+ 17. Now, wait while the Docker containers build on balena's servers. If the process is successful, you will see a beautiful piece of ASCII art depicting a unicorn right in your terminal window:
 <pre>
 			    \
 			     \
@@ -176,7 +176,7 @@ or
 			             <'
 
 </pre>
- 15. Wait a few moments while the Docker containers are deployed and installed on your device. The groundwork is now done – good job!
+ 18. Wait a few moments while the Docker containers are deployed and installed on your device. The groundwork is now done – good job!
 
 
 # Part 3 – Configure FlightAware
