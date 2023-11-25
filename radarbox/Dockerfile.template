@@ -55,4 +55,6 @@ RUN	mkdir -p /var/radarbox/thermal/thermal_zone0/ && \
 	chmod +x /showkey.sh && \
 	rm -rf /tmp/*
 
+mkdir -p /run/shm//
+
 ENTRYPOINT ["/start.sh"]
