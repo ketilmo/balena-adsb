@@ -47,10 +47,9 @@ version=$(echo "$script" | grep -oP '(?<=WINGBITS_CONFIG_VERSION=")[^"]*')
 echo "Latest available wingbits version: $version"
 
 if [ "$version" != "$local_version" ] || [ -z "$version" ]; then
-    echo "You are not running the latest Wingbits version. Please update at your earliest convenience."
+    echo "WARNING: You are not running the latest Wingbits version. Please update at your earliest convenience."
 else
     echo "Wingbits is up to date"
-    exit 0
 fi
 
 echo " "
