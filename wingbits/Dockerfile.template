@@ -46,6 +46,7 @@ RUN chmod +x /tmp/wingbits_installer.sh && \
 	./wingbits_installer.sh && \
         chmod +x /start.sh && \
         mkdir -p /run/wingbits-feed && \
+        echo "$WINGBITS_CONFIG_VERSION" > /etc/wingbits/version
 	rm -rf /tmp/*
 
 #COPY vector.yaml /etc/vector/vector.yaml
