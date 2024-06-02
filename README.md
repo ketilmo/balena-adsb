@@ -261,13 +261,17 @@ If you have previously set up a Plane Finder receiver and want to port it to bal
 ## Alternative B: Setup a new Plane Finder receiver
 If you have not previously set up a Plane Finder receiver that you want to reuse, do the following steps:
 
- 1. Register a new [Plane Finder account](https://planefinder.net).
- 2. If you cloned this repo, `balena-ads-b`, in part 2 of this guide, locate it on your computer and find the folder `planefinder`. Alternatively, if you used the *Deploy with balena*-button, download the following archive and unzip it: [SharecodeGenerator.zip](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/planefinder/SharecodeGenerator.zip)
- 3. Locate the file `SharecodeGenerator.html` and open it in your web browser.
- 4. Fill in the form to generate a Plane Finder share code. Use the same email address you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds. It should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
- 5. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
- 6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
- 7. On your device's page in the Balena dashboard, restart the *planefinder* service under *Services* by clicking the "cycle" icon next to the service name.
+ 1. Register a new [Plane Finder account](https://planefinder.net) or log into your existing account.
+ 2. Inside the *Terminal* section, click *Select a target*, then *planefinder*, and finally *Start terminal session*.
+ 3. This will open a terminal which lets you interact directly with your Plane Finder container.
+ 4. Once the terminal prompt appears, enter `pfclient`, then press return.
+ 5. If everything goes according to plan, you will see some output log messages in the terminal section.
+ 6. Scroll to the top of the page and look for the *Local IP Address* of your device - it should look something like `192.168.2.35` - if there is more than one IP address, any of them should work. Click the button next to the IP address to copy it to the clipboard.
+ 7. Open a browser window, paste in the IP address and then press return. This should load the Plane Finder sharecode generator page.
+ 8. Fill in the form to generate a Plane Finder share code. Use the same email address you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds. It should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
+ 9. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
+ 10. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
+ 11. On your device's page in the Balena dashboard, restart the *planefinder* service under *Services* by clicking the "cycle" icon next to the service name.
 
 # Part 6 – Configure OpenSky Network
 ## Alternative A: Port an existing OpenSky Network receiver
