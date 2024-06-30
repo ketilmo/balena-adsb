@@ -26,7 +26,6 @@ Contribute to the flight tracking community! Feed your local ADS-B data from an 
 # Supported devices
 |                                                                                                                        | Device                          |
 |------------------------------------------------------------------------------------------------------------------------|---------------------------------|
-| <img alt="balenaFin" height="24px" src="https://balena-fin.pages.dev/img/logo.png"/>                                   | balenaFin                       |
 | <img alt="Intel NUC" height="24px" src="https://docs.balena.io/img/device/intel-nuc.svg"/>                             | Intel NUC                       |
 | <img alt="Nvidia Jetson Nano SD-CARD" height="24px" src="https://docs.balena.io/img/device/jetson-nano.svg"/>          | Nvidia Jetson Nano SD-CARD      |
 | <img alt="Orange Pi Zero" height="24px" src="https://docs.balena.io/img/device/orange-pi-zero.svg"/>                   | Orange Pi Zero                  |
