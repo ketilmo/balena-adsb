@@ -17,7 +17,7 @@ missing_variables=false
 
 # Begin defining all the required configuration variables.
 
-[ -z "$LAT" ] && \echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
+[ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
 [ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
 
 # End defining all the required configuration variables.
