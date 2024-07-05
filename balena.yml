@@ -15,7 +15,7 @@ assets:
   logo:
     type: "blob.asset"
     data:
-      url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/logo.png"
+      url: "https://raw.githubusercontent.com/ketilmo/balena-ads-b/d3e821b241f1b106e1e0b206d5e5418a01ce1dbd/docs/images/logo.svg"
 data:
   applicationConfigVariables:
     - RESIN_HOST_CONFIG_gpu_mem: 128
