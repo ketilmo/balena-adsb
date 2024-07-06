@@ -17,7 +17,7 @@ missing_variables=false
 
 # Begin defining all the required configuration variables.
 
-[ -z "$LAT" ] && \echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
+[ -z "$LAT" ] && echo "Receiver latitude is missing, will abort startup." && missing_variables=true || echo "Receiver latitude is set: $LAT"
 [ -z "$LON" ] && echo "Receiver longitude is missing, will abort startup." && missing_variables=true || echo "Receiver longitude is set: $LON"
 
 # End defining all the required configuration variables.
@@ -38,13 +38,14 @@ echo " "
 
 # Build dump1090 configuration
 dump1090configuration="--device-type rtlsdr --device "$DUMP1090_DEVICE" --lat "$LAT" --lon "$LON" --fix --ppm "$DUMP1090_PPM" --max-range "$DUMP1090_MAX_RANGE" --net --net-heartbeat 60 --net-ro-size 1000 --net-ro-interval 0.05 --net-http-port 0 --net-ri-port 0 --net-ro-port 30002,30102 --net-sbs-port 30003 --net-bi-port 30004,30104 --net-bo-port 30005,30105 --raw --json-location-accuracy 2 --write-json /run/dump1090-fa --quiet"
-if [[ -z "$DUMP1090_GAIN" ]]; then
+if [[ -z "$DUMP1090_GAIN" ]] && [[ "$DUMP1090_ADAPTIVE_DYNAMIC_RANGE" != "false" ]]; then
         echo "Gain is not specified. Will enable Adaptive Dynamic Range."
         DUMP1090_ADAPTIVE_DYNAMIC_RANGE="true"
-else
+elif [[ -n "$DUMP1090_GAIN" ]]; then
         echo "Gain value set manually to $DUMP1090_GAIN. Disabling adaptive gain." && dump1090configuration="${dump1090configuration} --gain $DUMP1090_GAIN"
         DUMP1090_ADAPTIVE_DYNAMIC_RANGE="false"
 fi
+
 if [[ "$DUMP1090_ADAPTIVE_DYNAMIC_RANGE" == "true" ]]; then
         echo "Enabling Adaptive Dynamic Range." && dump1090configuration="${dump1090configuration} --adaptive-range"
         if [[ "$DUMP1090_ADAPTIVE_DYNAMIC_RANGE_TARGET" != "" ]]; then
