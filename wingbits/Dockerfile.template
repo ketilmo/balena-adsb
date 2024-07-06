@@ -51,7 +51,6 @@ RUN chmod +x /tmp/wingbits_installer.sh && \
 	echo "$WINGBITS_CONFIG_VERSION" > /etc/wingbits/version && \
 	rm -rf /tmp/*
 
-#COPY vector.yaml /etc/vector/vector.yaml
 RUN curl -o /etc/vector/vector.yaml https://gitlab.com/wingbits/config/-/raw/$WINGBITS_COMMIT_ID/vector.yaml
 RUN sed -i 's|DEVICE_ID|WINGBITS_DEVICE_ID|g' /etc/vector/vector.yaml
 
