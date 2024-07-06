@@ -13,9 +13,9 @@ transforms:
       - "readsb"
     drop_on_abort: true
     source: |
-      read_at, err = .now * 1000
+      read_at, _ = .now * 1000
       new_event.read_at = to_int!(read_at)
-      new_event.processed_at, err = to_unix_timestamp(.timestamp, unit: "milliseconds")
+      new_event.processed_at, _ = to_unix_timestamp(.timestamp, unit: "milliseconds")
       new_event.lat = .lat
       new_event.lon = .lon
       new_event.hex = .hex
