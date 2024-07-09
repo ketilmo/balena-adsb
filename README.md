@@ -1,5 +1,5 @@
 
-![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.png)
+![balena ADS-B Flight Tracker](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/header.svg)
 
 **ADS-B Flight Tracker running on balena with support for FlightAware, Flightradar24, Plane Finder, OpenSky Network, AirNav RadarBox, ADSB Exchange, and Wingbits.**
 
@@ -24,38 +24,16 @@ Contribute to the flight tracking community! Feed your local ADS-B data from an 
 🗞&nbsp; [Read past newsletters](https://buttondown.email/balena-ads-b/archive/)
 
 # Supported devices
-<table>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/fincm3.svg" alt="fincm3" style="max-width: 100%; margin: 0px 4px;"></td><td>balenaFin</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/intel-nuc.svg" alt="intel-nuc" style="max-width: 100%; margin: 0px 4px;"></td><td>Intel NUC</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/jetson-nano-2gb-devkit.svg" alt="jetson-nano-2gb-devkit" style="max-width: 100%; margin: 0px 4px;"></td><td>Nvidia Jetson Nano 2GB Devkit SD</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/jetson-nano.svg" alt="jetson-nano" style="max-width: 100%; margin: 0px 4px;"></td><td>Nvidia Jetson Nano SD-CARD</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/orange-pi-zero.svg" alt="orange-pi-zero" style="max-width: 100%; margin: 0px 4px;"></td><td>Orange Pi Zero</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi3.svg" alt="raspberrypi3" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 3 Model B+</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi3-64.svg" alt="raspberrypi3-64" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 3 (using 64bit OS)</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi4-64.svg" alt="raspberrypi4-64" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 4 (using 64bit OS)</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi400-64.svg" alt="raspberrypi400-64" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 400</td>
-</tr>
-<tr><td>
-<img height="24px" src="https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/docs/images/arch/raspberrypi5.svg" alt="raspberrypi5" style="max-width: 100%; margin: 0px 4px;"></td><td>Raspberry Pi 5</td>
-</tr>
-</table>
+|                                                                                                                        | Device                          |
+|------------------------------------------------------------------------------------------------------------------------|---------------------------------|
+| <img alt="Intel NUC" height="24px" src="https://docs.balena.io/img/device/intel-nuc.svg"/>                             | Intel NUC                       |
+| <img alt="Nvidia Jetson Nano SD-CARD" height="24px" src="https://docs.balena.io/img/device/jetson-nano.svg"/>          | Nvidia Jetson Nano SD-CARD      |
+| <img alt="Orange Pi Zero" height="24px" src="https://docs.balena.io/img/device/orange-pi-zero.svg"/>                   | Orange Pi Zero                  |
+| <img alt="Raspberry Pi 3 Model B+" height="24px" src="https://docs.balena.io/img/device/raspberrypi3.svg"/>            | Raspberry Pi 3 Model B+         |
+| <img alt="Raspberry Pi 3 (using 64bit OS)" height="24px" src="https://docs.balena.io/img/device/raspberrypi3-64.svg"/> | Raspberry Pi 3 (using 64bit OS) |
+| <img alt="Raspberry Pi 4 (using 64bit OS)" height="24px" src="https://docs.balena.io/img/device/raspberrypi4-64.svg"/> | Raspberry Pi 4 (using 64bit OS) |
+| <img alt="Raspberry Pi 400" height="24px" src="https://docs.balena.io/img/device/raspberrypi400-64.svg"/>              | Raspberry Pi 400                |
+| <img alt="Raspberry Pi 5" height="24px" src="https://docs.balena.io/img/device/raspberrypi5.svg"/>                     | Raspberry Pi 5                  |
 
 Please [let us know](https://github.com/ketilmo/balena-ads-b/discussions/new) if you are successfully running balena-ads-b on a hardware platform not listed here!
 
@@ -265,13 +243,17 @@ If you have previously set up a Plane Finder receiver and want to port it to bal
 ## Alternative B: Setup a new Plane Finder receiver
 If you have not previously set up a Plane Finder receiver that you want to reuse, do the following steps:
 
- 1. Register a new [Plane Finder account](https://planefinder.net).
- 2. If you cloned this repo, `balena-ads-b`, in part 2 of this guide, locate it on your computer and find the folder `planefinder`. Alternatively, if you used the *Deploy with balena*-button, download the following archive and unzip it: [SharecodeGenerator.zip](https://raw.githubusercontent.com/ketilmo/balena-ads-b/master/planefinder/SharecodeGenerator.zip)
- 3. Locate the file `SharecodeGenerator.html` and open it in your web browser.
- 4. Fill in the form to generate a Plane Finder share code. Use the same email address you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds. It should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
- 5. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
- 6. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
- 7. On your device's page in the Balena dashboard, restart the *planefinder* service under *Services* by clicking the "cycle" icon next to the service name.
+ 1. Register a new [Plane Finder account](https://planefinder.net) or log into your existing account.
+ 2. Inside the *Terminal* section, click *Select a target*, then *planefinder*, and finally *Start terminal session*.
+ 3. This will open a terminal which lets you interact directly with your Plane Finder container.
+ 4. Once the terminal prompt appears, enter `pfclient`, then press return.
+ 5. If everything goes according to plan, you will see some output log messages in the terminal section.
+ 6. Scroll to the top of the page and look for the *Local IP Address* of your device - it should look something like `192.168.2.35` - if there is more than one IP address, any of them should work. Click the button next to the IP address to copy it to the clipboard.
+ 7. Open a browser window, paste in the IP address and then press return. This should load the Plane Finder sharecode generator page.
+ 8. Fill in the form to generate a Plane Finder share code. Use the same email address you used when registering for the Plane Finder account. For *Receiver Lat*, use the value from the `LAT` variable in part 2. For *Receiver Lon*, use the value from the `LON` variable. Lastly, click the *Create new sharecode* button. A sharecode should appear in a few seconds. It should look similar to `6g34asr1gvvx7`. Copy it to your clipboard. Disregard the rest of the form – you don't have to fill this out.
+ 9. Open Plane Finder's *[Your Receivers](https://planefinder.net/account/receivers)* page. Under the *Add a Receiver* heading, locate the *Share Code* input field. Paste the sharecode from the previous step, then click the *Add Receiver*-button.
+ 10. Head back to the Balena dashboard and your device's page. Click on the *Device Variables*-button. Add a variable named `PLANEFINDER_SHARECODE` and paste the value of the Plane Finder key you just created, e.g. `7e3q8n45wq369`.
+ 11. On your device's page in the Balena dashboard, restart the *planefinder* service under *Services* by clicking the "cycle" icon next to the service name.
 
 # Part 6 – Configure OpenSky Network
 ## Alternative A: Port an existing OpenSky Network receiver
@@ -443,7 +425,7 @@ You can reduce the duty cycle further by creating a *Device Variable* named `DUM
 By default, dump1090 will run with adaptive gain in dynamic range mode. You can override this by setting a *Device Variable* named `DUMP1090_GAIN` with a value of your liking.  You can read more about manual gain optimization at the [adsb-wiki](https://github.com/wiedehopf/adsb-wiki/wiki/Optimizing-gain).
 
 # Part 14 – Updating to the latest version
-Updating to the latest version is trivial. If you installed balena-ads-b using the blue Deploy with balena-button, you can click it again and overwrite your current application. All settings will be preserved. For convenience, the button is right here:
+Updating to the latest version is trivial. If you installed balena-ads-b using the blue Deploy with balena-button, you can click it again and overwrite your current application. Choose the "Deploy to existing fleet" option, then select the fleet you want to update. All settings will be preserved. For convenience, the button is right here:
 
 [![Deploy with button](https://www.balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/ketilmo/balena-ads-b&defaultDeviceType=raspberrypi4-64)
 

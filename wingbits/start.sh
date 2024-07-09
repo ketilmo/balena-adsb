@@ -36,6 +36,24 @@ fi
 echo "Settings verified, proceeding with startup."
 echo " "
 
+# Check if Wingbits is latest version
+
+local_version=$(cat /etc/wingbits/version)
+echo "Current local version: $local_version"
+
+SCRIPT_URL="https://gitlab.com/wingbits/config/-/raw/master/download.sh"
+script=$(curl $SCRIPT_URL)
+version=$(echo "$script" | grep -oP '(?<=WINGBITS_CONFIG_VERSION=")[^"]*')
+echo "Latest available wingbits version: $version"
+
+if [ "$version" != "$local_version" ] || [ -z "$version" ]; then
+    echo "WARNING: You are not running the latest Wingbits version. Please update at your earliest convenience."
+else
+    echo "Wingbits is up to date"
+fi
+
+echo " "
+
 # Variables are verified – continue with startup procedure.
 
 # Start vector and readsb and put in the background.
