@@ -39,7 +39,7 @@ Please [let us know](https://github.com/ketilmo/balena-ads-b/discussions/new) if
 
 # Supported radios
 
-The default setting of this software is to use a RTL-SDR type radio device. However it is also compatible with Mode-S Beast, bladeRF, HackRF, LimeSDR or SoapySDR. You can find more information on how to configure these device types in the [Using different radio device types](#using-different-radio-device-types) section below.
+The default setting of this software is to use a RTL-SDR type radio device. However it is also compatible with Mode-S Beast, bladeRF, HackRF, LimeSDR and SoapySDR. You can find more information on how to configure these device types in the [Using different radio device types](#using-different-radio-device-types) section below.
 
 # Credits
 
