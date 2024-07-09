@@ -75,5 +75,4 @@ RUN dpkg -i dump1090-fa_*.deb && \
 	chmod +x /add-serial-1090.sh && \
 	chmod +x /showstrongmessages.sh
 
-
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]
