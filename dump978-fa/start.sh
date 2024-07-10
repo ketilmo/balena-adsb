@@ -45,7 +45,7 @@ echo " "
 
 # Variables are verified – continue with startup procedure.
   
-# Start dump1090-fa and put it in the background.
+# Start dump978-fa and put it in the background.
 /usr/bin/dump978-fa --sdr driver="$DUMP978_DRIVER" --raw-port 0.0.0.0:30978 --json-port 0.0.0.0:30979 --format CS8 --sdr-auto-gain &
 
 # Start skyaware978 and put it in the background.
