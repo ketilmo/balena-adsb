@@ -3,7 +3,7 @@
 
 **ADS-B Flight Tracker running on balena with support for FlightAware, Flightradar24, Plane Finder, OpenSky Network, AirNav RadarBox, ADSB Exchange, and Wingbits.**
 
-Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), [AirNav RadarBox](https://www.radarbox.com/), [ADSB Exchange](https://adsbexchange.com) and [Wingbits](https://wingbits.com). In return, you will receive complimentary premium accounts (or cryptocurrency tokens) worth several hundred dollars annually!
+Contribute to the flight tracking community! Feed your local ADS-B data from an [RTL-SDR](https://www.rtl-sdr.com/) USB dongle (or various other radio types) and a supported device (see below) running balenaOS to the tracking services [FlightAware](https://flightaware.com/), [Flightradar24](https://www.flightradar24.com/), [Plane Finder](https://planefinder.net/), [OpenSky Network](https://opensky-network.org/), [AirNav RadarBox](https://www.radarbox.com/), [ADSB Exchange](https://adsbexchange.com) and [Wingbits](https://wingbits.com). In return, you will receive complimentary premium accounts (or cryptocurrency tokens) worth several hundred dollars annually!
 
 # Stay in the loop
 
@@ -36,6 +36,10 @@ Contribute to the flight tracking community! Feed your local ADS-B data from an 
 | <img alt="Raspberry Pi 5" height="24px" src="https://docs.balena.io/img/device/raspberrypi5.svg"/>                     | Raspberry Pi 5                  |
 
 Please [let us know](https://github.com/ketilmo/balena-ads-b/discussions/new) if you are successfully running balena-ads-b on a hardware platform not listed here!
+
+# Supported radios
+
+The default setting of this software is to use a RTL-SDR type radio device. However it is also compatible with Mode-S Beast, bladeRF, HackRF, LimeSDR and SoapySDR. You can find more information on how to configure these device types in the [Using different radio device types](#using-different-radio-device-types) section below.
 
 # Credits
 
@@ -374,6 +378,23 @@ If you live in the US and have configuered UAT feeding, you can explore the data
 You can disable any of the balena-ads-b services by creating a *Device Variable* named `DISABLED_SERVICES` with the services you want to disable as comma-separated values. For example, if you want to disable the dump1090fa service, you set the `DISABLED_SERVICES` variable to `dump1090fa`. If you want to disable the dump1090fa and piaware services, you set the `DISABLED_SERVICES` variable to `dump1090fa, piaware`.
 
 **Please note:** Due to how these services are integrated, it's not currently possible to disable the `wifi-connect` and `kiosk` services.
+
+## Using different radio device types
+
+With balena-ads-b you are able to use a variety of SDRs (software defined radios) and other devices such as the FPGA based Mode-S Beast. The default operating mode is to use an RTL-SDR over USB and no additional configuration is needed for this setup.
+
+If you are using a Mode-S Beast, bladeRF, HackRF, LimeSDR or SoapySDR then you will need to configure this for the device to work as intended.
+
+In order to configure the particular device type you are using, you need to create a *Device Variable* named `RADIO_DEVICE_TYPE`. The possible values are below:
+
+- rtlsdr (this is the default and you do not need to configure this variable if you are using an RTL-SDR)
+- modesbeast
+- bladerf
+- hackrf
+- limesdr
+- soapysdr
+
+For example if you have a Mode-S Beast, you set the `RADIO_DEVICE_TYPE` variable to `modesbeast`. Remember to save the device variable settings after you have updated them. Your device should restart automatically once you configure this and the radio should now work.
 
 ## Adaptive gain configuration
 The dump1090-fa service can be configured to adapt the tuner gain to changing conditions automatically. You can [read more about how this works](https://github.com/flightaware/dump1090/blob/master/README.adaptive-gain.md#default-settings) at FlightAware's website. 
