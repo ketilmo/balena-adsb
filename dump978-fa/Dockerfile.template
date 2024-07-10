@@ -6,7 +6,7 @@ EXPOSE 30978 30979 8978
 ENV DUMP978_DEVICE=00000978
 ENV DUMP978_ENABLED=false
 
-ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd librtlsdr0 rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.74.0 libboost-regex1.74.0 libboost-system1.74.0" 
+ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd librtlsdr0 rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.74.0 libboost-regex1.74.0 libboost-system1.74.0 dbus"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \

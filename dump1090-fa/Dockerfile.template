@@ -13,7 +13,7 @@ ENV DUMP1090_ADAPTIVE_MIN_GAIN=""
 ENV DUMP1090_ADAPTIVE_MAX_GAIN=""
 ENV DUMP1090_SLOW_CPU=""
 
-ARG PERM_INSTALL="tini lighttpd gettext-base libusb-1.0-0 libbladerf2 libhackrf0 liblimesuite22.09-1 librtlsdr0 rtl-sdr libsoapysdr0.8 libncurses6"
+ARG PERM_INSTALL="tini lighttpd gettext-base libusb-1.0-0 libbladerf2 libhackrf0 liblimesuite22.09-1 librtlsdr0 rtl-sdr libsoapysdr0.8 libncurses6 dbus"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
