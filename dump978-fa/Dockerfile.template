@@ -5,6 +5,7 @@ EXPOSE 30978 30979 8978
 
 ENV DUMP978_DEVICE=00000978
 ENV DUMP978_ENABLED=false
+ENV DUMP978_REBOOT_ON_EXIT=""
 
 ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd librtlsdr0 rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.74.0 libboost-regex1.74.0 libboost-system1.74.0 dbus"
 
