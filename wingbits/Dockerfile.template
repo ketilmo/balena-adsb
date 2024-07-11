@@ -8,7 +8,8 @@ ENV WINGBITS_DEVICE_ID=
 ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
 
-ENV WINGBITS_CONFIG_VERSION=0.0.4
+ENV WINGBITS_CONFIG_VERSION=0.0.5
+ENV WINGBITS_COMMIT_ID=96cb3ffb4628fbb8a128a02d691ee16bdff7f917
 
 ARG PERM_INSTALL="curl gettext-base tini ncurses-bin zlib1g" 
 
@@ -50,8 +51,7 @@ RUN chmod +x /tmp/wingbits_installer.sh && \
 	echo "$WINGBITS_CONFIG_VERSION" > /etc/wingbits/version && \
 	rm -rf /tmp/*
 
-#COPY vector.yaml /etc/vector/vector.yaml
-RUN curl -o /etc/vector/vector.yaml https://gitlab.com/wingbits/config/-/raw/$WINGBITS_CONFIG_VERSION/vector.yaml
+RUN curl -o /etc/vector/vector.yaml https://gitlab.com/wingbits/config/-/raw/$WINGBITS_COMMIT_ID/vector.yaml
 RUN sed -i 's|DEVICE_ID|WINGBITS_DEVICE_ID|g' /etc/vector/vector.yaml
 
 ENTRYPOINT ["/usr/bin/tini", "--", "/start.sh"]

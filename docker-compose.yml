@@ -39,6 +39,7 @@ services:
     build: ./dump1090-fa
     image: dump1090-fa
     restart: always
+    privileged: true
     environment:
       - LAT=
       - LON=
@@ -225,6 +226,8 @@ services:
     restart: always
     environment:
       - WINGBITS_DEVICE_ID=
+      - LAT=
+      - LON=
     expose:
       - '30154'
 # Optional: Uncomment to enable custom mlat server.
