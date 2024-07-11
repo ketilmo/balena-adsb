@@ -75,6 +75,8 @@ if [[ "$DUMP1090_SLOW_CPU" != "" ]]; then
         echo "Setting Slow CPU mode to $DUMP1090_SLOW_CPU." && dump1090configuration="${dump1090configuration} --adaptive-duty-cycle $DUMP1090_SLOW_CPU"
 fi
 
+# Increase the allowed usbfs buffer size
+echo 0 > /sys/module/usbcore/parameters/usbfs_memory_mb
 
 # Start dump1090-fa and put it in the background.
 /usr/bin/dump1090-fa $dump1090configuration &
