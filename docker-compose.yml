@@ -35,6 +35,7 @@ services:
       - "80:80"
     labels:
       io.balena.features.balena-socket: '1'
+      io.balena.features.balena-api: '1'
   dump1090-fa:
     build: ./dump1090-fa
     image: dump1090-fa
@@ -68,6 +69,7 @@ services:
       - "30106:30106"
       - "8080:8080"
     labels:
+      - "io.balena.features.balena-api=1"
       - "traefik.enable=true"
       # New, permanent redirect (from 13 March 2021)
       - "traefik.http.routers.skyaware.rule=PathPrefix(`/skyaware`)"
@@ -102,6 +104,7 @@ services:
       - "30979:30979"
       - "8978:8978"
     labels:
+      - "io.balena.features.balena-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.dump978-fa.rule=PathPrefix(`/skyaware978`)"
       - "traefik.http.routers.dump978-fa.middlewares=dump978-fa-redirect"
@@ -117,6 +120,8 @@ services:
     environment:
       - FLIGHTAWARE_FEEDER_ID=
       - DUMP978_ENABLED=false
+    labels:
+      io.balena.features.balena-api: '1'
   fr24feed:
     depends_on:
       - dump1090-fa
@@ -128,6 +133,7 @@ services:
     environment:
       - FR24_KEY=
     labels:
+      - "io.balena.features.balena-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.fr24feed.rule=PathPrefix(`/fr24feed`)"
       - "traefik.http.routers.fr24feed-a.rule=Path(`/logo.png`)"
@@ -157,6 +163,7 @@ services:
     ports:
       - "30053:30053"
     labels:
+      - "io.balena.features.balena-api=1"
       - "traefik.enable=true"
       - "traefik.http.routers.planefinder.rule=PathPrefix(`/planefinder`)"
       - "traefik.http.routers.planefinder-a.rule=PathPrefix(`/`)"
@@ -184,6 +191,8 @@ services:
     environment:
       - OPENSKY_USERNAME=
       - OPENSKY_SERIAL=
+    labels:
+      io.balena.features.balena-api: '1'
   radarbox:
     depends_on:
       - dump1090-fa
@@ -201,6 +210,8 @@ services:
     volumes:
       - 'radarbox:/sys/class/thermal:ro'
       - 'radarbox:/var/radarbox/thermal'
+    labels:
+      io.balena.features.balena-api: '1'
   adsb-exchange:
     depends_on:
       - dump1090-fa
@@ -218,6 +229,8 @@ services:
       - '30154'
       - '30157'
       - '31003'
+    labels:
+      io.balena.features.balena-api: '1'
   wingbits:
     depends_on:
       - dump1090-fa
@@ -230,6 +243,8 @@ services:
       - LON=
     expose:
       - '30154'
+    labels:
+      io.balena.features.balena-api: '1'
 # Optional: Uncomment to enable custom mlat server.
 #  mlat-client:
 #    depends_on:
@@ -242,6 +257,8 @@ services:
 #      - LON=
 #      - ALT=
 #      - MLAT_CLIENT_USER=
+#    labels:
+#      io.balena.features.balena-api: '1'
 
 
     

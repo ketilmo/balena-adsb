@@ -5,6 +5,7 @@ set -e
 
 if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled."
+        curl --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v2/applications/$BALENA_APP_ID/stop-service?apikey=$BALENA_SUPERVISOR_API_KEY" -d '{"serviceName": "'$BALENA_SERVICE_NAME'"}'
         sleep infinity
 fi
 # Verify that all the required varibles are set before starting up the application.
@@ -28,6 +29,7 @@ if [ "$missing_variables" = true ]
 then
         echo "Settings missing, aborting..."
         echo " "
+        curl --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v2/applications/$BALENA_APP_ID/stop-service?apikey=$BALENA_SUPERVISOR_API_KEY" -d '{"serviceName": "'$BALENA_SERVICE_NAME'"}'
         sleep infinity
 fi
 
