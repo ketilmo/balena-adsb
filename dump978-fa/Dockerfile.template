@@ -7,7 +7,7 @@ ENV DUMP978_DEVICE=00000978
 ENV DUMP978_ENABLED=false
 ENV REBOOT_DEVICE_ON_SERVICE_EXIT=""
 
-ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd librtlsdr0 rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.74.0 libboost-regex1.74.0 libboost-system1.74.0 dbus"
+ARG PERM_INSTALL="tini libboost-program-options-dev libusb-1.0-0 lighttpd librtlsdr0 rtl-sdr soapysdr-module-rtlsdr gettext-base libboost-filesystem1.74.0 libboost-regex1.74.0 libboost-system1.74.0"
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \

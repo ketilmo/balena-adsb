@@ -55,8 +55,8 @@ echo " "
 /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf &
 
 # Check if device reboot on service exit has been enabled through the REBOOT_DEVICE_ON_SERVICE_EXIT environment variable.
-if [[ "$REBOOT_DEVICE_ON_SERVICE_EXIT" = "true" ]]; then
-        echo "Device reboot on service exit it enabled."
+if [[ "$REBOOT_DEVICE_ON_SERVICE_EXIT" == "true" ]]; then
+        echo "Device reboot on service exit is enabled."
 fi
 
 # Wait for any services to exit.
@@ -64,5 +64,5 @@ wait -n
 
 if [[ "$REBOOT_DEVICE_ON_SERVICE_EXIT" == "true" ]]; then
         echo "Service exited, rebooting the device..."
-        dbus-send --system --print-reply --dest=org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager.Reboot
+        curl -X POST --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v1/reboot?apikey=$BALENA_SUPERVISOR_API_KEY"
 fi
