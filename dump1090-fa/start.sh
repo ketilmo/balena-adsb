@@ -7,7 +7,7 @@ if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SER
         echo "$BALENA_SERVICE_NAME is manually disabled."
         sleep infinity
 fi
-# Verify that all the required varibles are set before starting up the application.
+# Verify that all the required variables are set before starting up the application.
 
 echo "Verifying settings..."
 echo " "

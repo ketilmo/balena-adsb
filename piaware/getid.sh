@@ -2,7 +2,7 @@
 set -e
 trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
 
-# Verify that all the required varibles are set before starting up the application.
+# Verify that all the required variables are set before starting up the application.
 
 echo "Verifying required settings..."
 echo " "
