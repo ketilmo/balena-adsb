@@ -424,6 +424,9 @@ You can reduce the duty cycle further by creating a *Device Variable* named `DUM
 ## Setting dump1090 antenna gain
 By default, dump1090 will run with adaptive gain in dynamic range mode. You can override this by setting a *Device Variable* named `DUMP1090_GAIN` with a value of your liking.  You can read more about manual gain optimization at the [adsb-wiki](https://github.com/wiedehopf/adsb-wiki/wiki/Optimizing-gain).
 
+## Device reboot on service exit
+dump978 and dump1090 can restart the device if it hits an error. You can enable this feature by setting a *Device Variable* named `REBOOT_DEVICE_ON_SERVICE_EXIT` with the value of `true`.
+
 # Part 14 – Updating to the latest version
 Updating to the latest version is trivial. If you installed balena-ads-b using the blue Deploy with balena-button, you can click it again and overwrite your current application. Choose the "Deploy to existing fleet" option, then select the fleet you want to update. All settings will be preserved. For convenience, the button is right here:
 
