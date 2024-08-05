@@ -53,7 +53,12 @@ echo " "
 
 # Start lighthttpd and put it in the background.
 /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf &
- 
+
+# Check if device reboot on service exit has been enabled through the REBOOT_DEVICE_ON_SERVICE_EXIT environment variable.
+if [[ "$REBOOT_DEVICE_ON_SERVICE_EXIT" = "true" ]]; then
+        echo "Device reboot on service exit it enabled."
+fi
+
 # Wait for any services to exit.
 wait -n
 

@@ -107,7 +107,12 @@ fi
   
 # Start lighttpd and put it in the background.
 /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf 2>&1 | stdbuf -o0 sed --unbuffered '/^$/d' | awk -W interactive '{print "[lighttpd]    "  $0}' &
- 
+
+# Check if device reboot on service exit has been enabled through the REBOOT_DEVICE_ON_SERVICE_EXIT environment variable.
+if [[ "$REBOOT_DEVICE_ON_SERVICE_EXIT" = "true" ]]; then
+        echo "Device reboot on service exit it enabled."
+fi
+
 # Wait for any services to exit.
 wait -n
 
