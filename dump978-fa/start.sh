@@ -57,7 +57,7 @@ echo " "
 # Wait for any services to exit.
 wait -n
 
-if [[ "$DUMP978_REBOOT_ON_EXIT" == "true" ]]; then
+if [[ "$REBOOT_DEVICE_ON_SERVICE_EXIT" == "true" ]]; then
         echo "Service exited, rebooting the device..."
         dbus-send --system --print-reply --dest=org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager.Reboot
 fi
