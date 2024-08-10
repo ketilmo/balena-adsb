@@ -348,10 +348,11 @@ In the United States, aircraft can use either the ADS-B standard, which transmit
 9. Head to your device's *Summary* page. Wait for all containers to come up with the status *Running*. Inside the *Terminal* section, click *Select a target*, then *dump978-fa*, and finally *Start terminal session*.
 10. Once the terminal prompt appears, enter `/add-serial-978.sh`, then press return.
 11. Type `YES`, followed by return, to change your dongle's serial number. Verify that the process completes successfully.
-12. Shut down your device. When it's powered off, connect both RTL-SDR sticks.
-13. Click on the *Device Variables* button in the left-hand menu. Delete the `DISABLED_SERVICES` variable.
-14. Add a new variable named `UAT_ENABLED` and assign it the value `true`.
-15. Power on the device. You should now be feeding ADS-B and UAT data simultaneously to the services that support it (FlightAware, RadarBox and ADSB-Exchange).
+12. Click on the *Device Variables*-button in the left-hand menu. Add a new variable named `DUMP978_DEVICE` and set its value to `00000978`.
+13. Shut down your device. When it's powered off, connect both RTL-SDR sticks.
+14. Click on the *Device Variables* button in the left-hand menu. Delete the `DISABLED_SERVICES` variable.
+15. Add a new variable named `UAT_ENABLED` and assign it the value `true`.
+16. Power on the device. You should now be feeding ADS-B and UAT data simultaneously to the services that support it (FlightAware, RadarBox and ADSB-Exchange).
 
 # Part 11 – Add a digital display (Optional)
 balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port is one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
