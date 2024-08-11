@@ -1,6 +1,7 @@
 ARG BALENA_ARCH=%%BALENA_ARCH%%
 
 FROM balenalib/$BALENA_ARCH-debian
+LABEL maintainer="https://github.com/ketilmo"
 ARG BALENA_ARCH=%%BALENA_ARCH%%
 
 

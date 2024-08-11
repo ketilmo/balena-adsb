@@ -11,6 +11,8 @@ services:
       - 8081:8080
     volumes:
       - 'settings:/data'
+    labels:
+      io.balena.features.supervisor-api: '1'
   wifi-connect:
     build: ./wifi-connect
     restart: unless-stopped
@@ -27,6 +29,7 @@ services:
       - NET_ADMIN
     labels:
       io.balena.features.dbus: '1'
+      io.balena.features.supervisor-api: '1'
   frontend-proxy:
     image: traefik
     build: ./traefik

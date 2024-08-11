@@ -1,3 +1,10 @@
 FROM bh.cr/balenalabs/browser-%%BALENA_ARCH%%/2.7.0
+LABEL maintainer="https://github.com/ketilmo"
 
-RUN install_packages cec-utils
+RUN install_packages cec-utils tini
+
+COPY start.sh /usr/src/app/start_custom.sh
+
+RUN chmod +x /usr/src/app/start_custom.sh
+
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/src/app/start_custom.sh"]

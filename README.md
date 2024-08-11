@@ -379,8 +379,6 @@ If you live in the US and have configuered UAT feeding, you can explore the data
 ## Disabling specific services
 You can disable any of the balena-ads-b services by creating a *Device Variable* named `DISABLED_SERVICES` with the services you want to disable as comma-separated values. For example, if you want to disable the dump1090fa service, you set the `DISABLED_SERVICES` variable to `dump1090fa`. If you want to disable the dump1090fa and piaware services, you set the `DISABLED_SERVICES` variable to `dump1090fa, piaware`.
 
-**Please note:** Due to how these services are integrated, it's not currently possible to fully disable the `wifi-connect` and `kiosk` services. However, you can stop `wifi-connect` by setting the `PORTAL_INTERFACE` variable to `lo`. Similarly, you can stop the `kiosk` service from starting by setting the `DISPLAY_NUM` variable to `&& exit 0`.
-
 ## Using different radio device types
 
 With balena-ads-b you are able to use a variety of SDRs (software defined radios) and other devices such as the FPGA based Mode-S Beast. The default operating mode is to use an RTL-SDR over USB and no additional configuration is needed for this setup.

@@ -10,8 +10,5 @@ if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SER
         balena-idle
 fi
 
-# Start traefik and put it in the background.
-traefik --providers.docker="true" --providers.docker.exposedbydefault="false" --entrypoints.web.address=:"80" --log.level="ERROR" --log.filepath="/dev/console" --accesslog.filepath="/dev/console" --global.sendAnonymousUsage="false" &
-
-# Wait for any services to exit.
-wait -n
+# Start app
+/usr/src/app/start.sh
