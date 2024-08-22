@@ -22,7 +22,7 @@ services:
       - PORTAL_LISTENING_PORT=8181
       - PORTAL_SSID=balenaWiFi
       - PORTAL_PASSPHRASE=balenaWiFi
-      - ACTIVITY_TIMEOUT=120
+      - ACTIVITY_TIMEOUT=180
     ports:
       - "8181:8181"
     cap_add:

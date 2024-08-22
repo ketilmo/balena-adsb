@@ -4,8 +4,7 @@ FROM balenalib/$BALENA_ARCH-debian
 LABEL maintainer="https://github.com/ketilmo"
 ARG BALENA_ARCH=%%BALENA_ARCH%%
 
-
-RUN install_packages dnsmasq wireless-tools
+RUN install_packages dnsmasq wireless-tools git npm
 
 # use latest version. If specific version is required, it should be provided as vX.Y.Z, e.g v4.11.37
 ARG VERSION="latest"
@@ -30,7 +29,17 @@ RUN \
         export URL_PARTIAL="download/${VERSION}" ; \
     fi; \
     curl -Ls "$BASE_URL/$URL_PARTIAL/wifi-connect-$BINARY_ARCH_NAME.tar.gz" \
-    | tar -xvz -C  /usr/src/app/
+    | tar -xvz -C  /usr/src/app/ &&\
+    mkdir tmp && cd tmp &&\
+    git clone -b master --single-branch https://github.com/balena-os/wifi-connect
+
+COPY package.json /usr/src/app/tmp/wifi-connect/ui/
+COPY package-lock.json /usr/src/app/tmp/wifi-connect/ui/
+
+RUN cd /usr/src/app/tmp/wifi-connect/ui && npm ci && npm run build &&\
+    mv /usr/src/app/tmp/wifi-connect/ui/build /usr/src/app/ui &&\
+    cd /usr/src/app && rm -rf tmp &&\
+    apt-get purge git npm && apt-get autoremove && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 COPY start.sh .
 
