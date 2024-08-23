@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - DBUS_SYSTEM_BUS_ADDRESS="unix:path=/host/run/dbus/system_bus_socket"
+      - DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
       - PORTAL_LISTENING_PORT=8181
       - PORTAL_SSID=balenaWiFi
       - PORTAL_PASSPHRASE=balenaWiFi
