@@ -9,7 +9,7 @@
     "react-scripts": "^5.0.1",
     "rendition": "^18.3.0",
     "styled-components": "^5.0.1",
-    "typescript": "^3.8.3",
+    "typescript": "^5.0.0",
     "whatwg-fetch": "^3.0.0"
   },
   "scripts": {
