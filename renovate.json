@@ -2,5 +2,56 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "ignorePaths": [
+    "autohupr/**",
+    "wifi-connect/**"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)Dockerfile$",
+        "(^|/)Dockerfile\\.[^/]*$"
+      ],
+      "matchStrings": [
+        "renovate: datasource=(?<datasource>.*?) depName=(?<depName>.*?)( versioning=(?<versioning>.*?))?\\s(ARG|ENV) .*?_VERSION=(?<currentValue>.*)\\s"
+      ],
+      "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)Dockerfile\\.[^/]*$"],
+      "matchStrings": ["READSB_COMMIT=(?<currentDigest>.*?)\\n"],
+      "currentValueTemplate": "master",
+      "depNameTemplate": "github.com/adsb-related-code/readsb",
+      "packageNameTemplate": "https://github.com/adsb-related-code/readsb",
+      "datasourceTemplate": "git-refs"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)Dockerfile\\.[^/]*$"],
+      "matchStrings": ["WINGBITS_COMMIT_ID=(?<currentDigest>.*?)\\n"],
+      "currentValueTemplate": "master",
+      "depNameTemplate": "gitlab.com/wingbits/config",
+      "packageNameTemplate": "https://gitlab.com/wingbits/config",
+      "datasourceTemplate": "git-refs"
+    }
+  ],
+  "customDatasources": {
+    "flightradar24": {
+      "defaultRegistryUrlTemplate": "https://s3.dualstack.us-east-1.amazonaws.com/repo.feed.flightradar24.com/fr24feed_versions.json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\": $.platform.linux_arm64_tgz.version}]}"
+      ]
+    }
+  },
+  "logLevelRemap": [
+    {
+      "matchMessage": "/^Custom manager fetcher/",
+      "newLogLevel": "info"
+    }
   ]
 }
