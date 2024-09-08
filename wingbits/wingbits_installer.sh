@@ -6,6 +6,5 @@ echo System Architecture: $arch
 
 cd /tmp
 
-curl -1sLf 'https://repositories.timber.io/public/vector/cfg/setup/bash.deb.sh' | sudo -E bash
 bash -c "$(curl -L https://setup.vector.dev)"
 apt-get -y install vector
