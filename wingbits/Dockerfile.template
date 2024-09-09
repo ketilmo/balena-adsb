@@ -22,7 +22,7 @@ RUN apt update && \
 FROM base AS buildstep
 
 # renovate: datasource=git-refs depName=github.com/adsb-related-code/readsb versioning=loose
-ARG READSB_COMMIT=21353a0d9eeb71f42371e053e0104ee06e21b87c
+ARG READSB_COMMIT=f535e517996ad04ce8126a58757a9b91a82fe542
 ARG TEMP_INSTALL="git gcc make libusb-1.0-0-dev ncurses-dev build-essential debhelper libncurses5-dev zlib1g-dev python3-dev libzstd-dev pkg-config"
 
 WORKDIR /tmp
