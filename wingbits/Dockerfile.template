@@ -10,7 +10,7 @@ ENV RECEIVER_PORT=30005
 
 ENV WINGBITS_CONFIG_VERSION=0.0.7
 # renovate: datasource=git-refs depName=gitlab.com/wingbits/config versioning=loose
-ENV WINGBITS_COMMIT_ID=5220b1d82379416f85f2ff5417575b3081f0559a
+ENV WINGBITS_COMMIT_ID=56cfe033fed56f46a019455a9ff75cfb604c4bc2
 
 ARG PERM_INSTALL="curl gettext-base tini ncurses-bin zlib1g" 
 
