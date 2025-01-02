@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:bullseye AS base
+FROM balenalib/%%BALENA_ARCH%%-debian:bookworm AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 ENV OPENSKY_USERNAME=
