@@ -1,17 +1,24 @@
 name: "Deploy to Balena"
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
 
 env:
   BALENA_APP: ketil/balena-ads-b
+  balena-cli: v20.2.2
 
 jobs:
   build:
     name: "Deploy-to-Balena"
     runs-on: "ubuntu-latest"
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        sbc: [raspberrypi3, raspberrypi3-64, raspberrypi4-64]
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v4
@@ -30,3 +37,80 @@ jobs:
           balena_token: ${{ secrets.BALENA_API_KEY }}
           fleet: ${{ env.BALENA_APP }}
           multi_dockerignore: true
+
+      - name: Set date
+        run: |
+          echo "timestamp=$(date +'%s')" >> $GITHUB_ENV
+          echo "day=$(date +'%F')" >> $GITHUB_ENV
+
+      - name: Balena Preload
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl unzip zip
+          cd /opt/
+          echo "Uses Balena CLI version: ${{ env.balena-cli }}"
+          curl -O -sSL "https://github.com/balena-io/balena-cli/releases/download/${{ env.balena-cli }}/balena-cli-${{ env.balena-cli }}-linux-x64-standalone.zip"
+          unzip balena-cli-*-linux-x64-standalone.zip
+          sudo ln -s /opt/balena-cli/balena /usr/bin/
+          cd ~
+
+          IMAGE_BASE_PATH="$(pwd)/images"
+
+          # Make the base path for the generated images.
+          mkdir -p "$IMAGE_BASE_PATH"
+
+          balena_os="${{ matrix.sbc }}"
+          base_image_path="${IMAGE_BASE_PATH}/balena-base-${{ github.event.repository.name }}.img"
+          balena_os_version="$(balena os versions $balena_os | head -n 1)"
+          image_name="${{ matrix.sbc }}-${{ env.day }}-${{ env.timestamp }}"
+          image_path="${IMAGE_BASE_PATH}/${image_name}.img"
+          compressed_image_path=${image_path/img/zip}
+
+          echo -e "Downloading image ${balena_os} for version ${balena_os_version} and writing to ${base_image_path}"
+          balena os download "$balena_os" -o "$base_image_path" --version "$balena_os_version"
+
+          balena login --token ${{ secrets.BALENA_API_KEY }} > /dev/null
+
+          # Minimum output
+          echo "Generating image for ${{ env.BALENA_APP }} fleet"
+          echo "Image path is ${image_path}"
+
+          # Configure balena OS image
+          echo "Configuring image"
+          cp "$base_image_path" "$image_path"
+          balena os configure "$image_path" --fleet "${{ env.BALENA_APP }}" --config-network ethernet --version "$balena_os_version"
+
+          echo "Pre-loading apps"
+
+          # Preload balena OS image
+          balena preload "$image_path" --fleet "${{ env.BALENA_APP }}" -c "current"
+
+          # Compress Balena image file and generate SHA512 checksum file
+          # Make the compressed file name from the image file name
+
+          echo "Compressing image"
+          zip -9 -j "$compressed_image_path" "$image_path"
+          echo "Generating checksum"
+          sha512sum "$compressed_image_path" > "$compressed_image_path.sha512"
+
+          # Export image name and compressed image path to the environment
+          IMAGE_NAME="$image_name"
+          COMPRESSED_IMAGE_PATH="$compressed_image_path"
+          echo "Image Name: ${IMAGE_NAME}"
+          echo "Compressed Image Path: ${COMPRESSED_IMAGE_PATH}"
+          echo "IMAGE_NAME=${IMAGE_NAME}" >> $GITHUB_ENV
+          echo "COMPRESSED_IMAGE_PATH=${COMPRESSED_IMAGE_PATH}" >> $GITHUB_ENV
+
+      - name: Copy OS image file and checksum to final location
+        run: |
+          cp "${{ env.COMPRESSED_IMAGE_PATH }}" "${{ env.IMAGE_NAME }}.zip"
+          cp "${{ env.COMPRESSED_IMAGE_PATH }}.sha512" "${{ env.IMAGE_NAME }}.zip.sha512"          
+
+      - name: Upload image file and checksum to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ env.IMAGE_NAME }}.*
+          tag: ${{ env.day }}-${{ env.timestamp }}
+          overwrite: true
+          file_glob: true
