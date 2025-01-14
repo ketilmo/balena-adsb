@@ -61,18 +61,31 @@ jobs:
           balena_os="${{ matrix.sbc }}"
           base_image_path="${IMAGE_BASE_PATH}/balena-base-${{ github.event.repository.name }}.img"
           balena_os_version="$(balena os versions $balena_os | head -n 1)"
+          image_name="${{ matrix.sbc }}-${{ env.day }}-${{ env.timestamp }}"
+          image_path="${IMAGE_BASE_PATH}/${image_name}.img"
+          compressed_image_path=${image_path/img/zip}
 
           echo -e "Downloading image ${balena_os} for version ${balena_os_version} and writing to ${base_image_path}"
           balena os download "$balena_os" -o "$base_image_path" --version "$balena_os_version"
 
           balena login --token ${{ secrets.BALENA_API_KEY }} > /dev/null
 
+          # Minimum output
+          echo "Generating image for ${{ env.BALENA_APP }} fleet"
+          echo "Image path is ${image_path}"
+
+          # Configure balena OS image
+          echo "Configuring image"
+          cp "$base_image_path" "$image_path"
+          balena os configure "$image_path" --fleet "${{ env.BALENA_APP }}" --config-network ethernet --version "$balena_os_version"
+
+          echo "Pre-loading apps"
+
+          # Preload balena OS image
+          balena preload "$image_path" --fleet "${{ env.BALENA_APP }}" -c "current"
+
           # Compress Balena image file and generate SHA512 checksum file
           # Make the compressed file name from the image file name
-
-          image_name="${{ matrix.sbc }}-${{ env.day }}-${{ env.timestamp }}"
-          image_path="${IMAGE_BASE_PATH}/${image_name}.img"
-          compressed_image_path=${image_path/img/zip}
 
           echo "Compressing image"
           zip -9 -j "$compressed_image_path" "$image_path"
