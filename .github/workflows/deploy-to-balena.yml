@@ -1,6 +1,7 @@
 name: "Deploy to Balena"
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
