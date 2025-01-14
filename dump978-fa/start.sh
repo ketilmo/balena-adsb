@@ -2,15 +2,16 @@
 set -e
 
 # Check if service has been disabled through the DISABLED_SERVICES environment variable.
+# Also check whether user is trying to set rtlsdr serial number for dump1090-fa.
 
-if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
+if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]] || [[ "$DUMP1090_IDLE" = "true" ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled. Sending request to stop the service:"
         curl --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v2/applications/$BALENA_APP_ID/stop-service?apikey=$BALENA_SUPERVISOR_API_KEY" -d '{"serviceName": "'$BALENA_SERVICE_NAME'"}'
         echo " "
         balena-idle
 fi
 
-# Check if service has been enabled through the UAT_ENABLED environment variable. 
+# Check if service has been enabled through the UAT_ENABLED environment variable.
 
 if ! [[ "$UAT_ENABLED" = "true" ]]; then
         echo "$BALENA_SERVICE_NAME is not enabled. Sending request to stop the service:"
@@ -48,9 +49,28 @@ echo "Settings verified, proceeding with startup."
 echo " "
 
 # Variables are verified – continue with startup procedure.
-  
+
+# Check for idle variable (for setting eeprom / serial)
+if [ -z "$DUMP978_IDLE" ]
+then
+	echo "DUMP978 idle not set. Continuing container startup."
+else
+	echo "DUMP978 idle set. Idling container to allow setting rtlsdr serial."
+ 	balena-idle
+fi
+
+# Check for gain value
+if [ -z "$DUMP978_GAIN" ]
+then
+	echo "DUMP978 gain not set. Using autogain."
+        SDR_GAIN="--sdr-auto-gain"
+else
+	echo "DUMP978 gain set. Using gain value $DUMP978_GAIN"
+ 	SDR_GAIN="--sdr-gain $DUMP978_GAIN"
+fi
+
 # Start dump978-fa and put it in the background.
-/usr/bin/dump978-fa --sdr driver="$DUMP978_DRIVER" --raw-port 0.0.0.0:30978 --json-port 0.0.0.0:30979 --format CS8 --sdr-auto-gain &
+/usr/bin/dump978-fa --sdr driver="$DUMP978_DRIVER" --raw-port 0.0.0.0:30978 --json-port 0.0.0.0:30979 --format CS8 "$SDR_GAIN" &
 
 # Start skyaware978 and put it in the background.
 /usr/bin/skyaware978 --connect localhost:30978 --reconnect-interval 30 --lat "$LAT" --lon "$LON" --json-dir /run/skyaware978 &

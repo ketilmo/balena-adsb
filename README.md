@@ -106,8 +106,12 @@ Software packages downloaded, installed, and configured by the balena-ads-b scri
 - [Part 12 – Exploring flight traffic locally on your device](#part-12--exploring-flight-traffic-locally-on-your-device)
 - [Part 13 – Advanced configuration](#part-13--advanced-configuration)
   * [Disabling specific services](#disabling-specific-services)
+  * [Using different radio device types](#using-different-radio-device-types)
   * [Adaptive gain configuration](#adaptive-gain-configuration)
   * [Setting dump1090 antenna gain](#setting-dump1090-antenna-gain)
+  * [Device reboot on service exit](#device-reboot-on-service-exit)
+  * [Automatic balenaOS host updates](#automatic-balenaos-host-updates)
+  * [Custom MLAT client](#custom-mlat-client)
  - [Part 14 – Updating to the latest version](#part-14--updating-to-the-latest-version)
 
 # Part 1 – Build the receiver
@@ -369,21 +373,27 @@ If you have not previously set up a Wingbits receiver that you want to reuse, do
 In the United States, aircraft can use either the ADS-B standard, which transmits at a frequency of 1090 MHz or the UAT protocol, which transmits at 978 MHz. If you live in the US and have an extra RTL-SDR dongle, you can track the UAT and ADS-B traffic. Please note that the blue FlightAware USB devices should only be used for ADS-B traffic, as they have an integrated filter optimized explicitly for the 1090 MHz frequencies. The orange FlightAware USB devices work well for tracking UAT traffic.
 
 1. Make sure you only have one RTL-SDR stick connected to your device before executing the following steps. The connected stick should be used for regular ADS-B 1090 MHz feeding. 
-2. Head to your device's *Summary* page. Click on the Device Variables-button in the left-hand menu. Add a variable named `DISABLED_SERVICES` and populate it with the values `dump1090-fa,dump978-fa`.
-3. From the *Summary* page, inside the *Terminal* section, click *Select a target*, then *dump1090-fa*, and finally *Start terminal session*. This will open a terminal that lets you interact directly with your PiAware container.
+2. Head to your device's *Summary* page. Click on the *Device Variables*-button in the left-hand menu. Add a variable named `DUMP1090_IDLE` and populate it with the value `true`.
+3. From the *Summary* page, inside the *Terminal* section, click *Select a target*, then *dump1090-fa*, and finally *Start terminal session*. This will open a terminal that lets you interact directly with the dump1090-fa container.
 4. Once the terminal prompt appears, enter `/add-serial-1090.sh`, then press return. 
 5. Type `YES`, followed by return, to change your dongle's serial number. Verify that the process completes successfully.
 6. Click on the *Device Variables*-button in the left-hand menu. Add a new variable named `DUMP1090_DEVICE` and set its value to `00001090`.
 7. Shut down your device. When it's powered off, remove the first RTL-SDR stick from the Pi.
 8. Insert the second RTL-SDR stick (the one used for UAT), leaving the first stick disconnected. Power on your device.
-9. Head to your device's *Summary* page. Wait for all containers to come up with the status *Running*. Inside the *Terminal* section, click *Select a target*, then *dump978-fa*, and finally *Start terminal session*.
-10. Once the terminal prompt appears, enter `/add-serial-978.sh`, then press return.
-11. Type `YES`, followed by return, to change your dongle's serial number. Verify that the process completes successfully.
-12. Click on the *Device Variables*-button in the left-hand menu. Add a new variable named `DUMP978_DEVICE` and set its value to `00000978`.
-13. Shut down your device. When it's powered off, connect both RTL-SDR sticks.
-14. Click on the *Device Variables* button in the left-hand menu. Delete the `DISABLED_SERVICES` variable.
-15. Add a new variable named `UAT_ENABLED` and assign it the value `true`.
+9. Click on the Device Variables-button in the left-hand menu. Delete the variable you created earlier called `DUMP1090_IDLE`. Then create a variable named `DUMP978_IDLE` and populate it with the value `true`. Also add a new variable named `UAT_ENABLED` and assign it the value `true`.
+10. Head to your device's *Summary* page. Wait for all containers to come up with the status *Running*. Inside the *Terminal* section, click *Select a target*, then *dump978-fa*, and finally *Start terminal session*.
+11. Once the terminal prompt appears, enter `/add-serial-978.sh`, then press return.
+12. Type `YES`, followed by return, to change your dongle's serial number. Verify that the process completes successfully.
+13. Click on the *Device Variables*-button in the left-hand menu. Add a new variable named `DUMP978_DEVICE` and set its value to `00000978`.
+14. Shut down your device. When it's powered off, connect both RTL-SDR sticks.
+15. Click on the *Device Variables*-button in the left-hand menu. Delete the `DUMP978_IDLE` variable.
 16. Power on the device. You should now be feeding ADS-B and UAT data simultaneously to the services that support it (FlightAware, RadarBox and ADSB-Exchange).
+
+**Manually set gain for UAT/dump978**
+
+By default the gain for the UAT/dump978 service is set to `--sdr-auto-gain`. This is an automatic setting which tries to get the optimum gain setting for your setup. In some cases the automatic gain setting can cause issues with over-saturation of your receiver, and so we have added an optional setting for `DUMP978_GAIN` to allow you to manually set it to an appropriate value of your choosing.
+
+In order to manually set the gain. click on the *Device Variables*-button in the left-hand menu in the balena dashboard. Add a new variable named `DUMP978_GAIN` and set its value to your required gain. You can choose from any of the following values: `0.0, 0.9, 1.4, 2.7, 3.7, 7.7, 8.7, 12.5, 14.4, 15.7, 16.6, 19.7, 20.7, 22.9, 25.4, 28.0, 29.7, 32.8, 33.8, 36.4, 37.2, 38.6, 40.2, 42.1, 43.4, 43.9, 44.5, 48.0, 49.6`
 
 # Part 11 – Add a digital display (Optional)
 balena also produces a project that can be easily configured to display a webpage in kiosk mode on a digital display called balenaDash. By dropping that project into this one, we can automatically display a feeder page directly from the Pi. We can then set a `LAUNCH_URL` device variable configured to connect to `http://{{YOURIP or YOURSERVICENAME}}:YOURSERVICEPORT` (where the service/port is one of the frontends above, like `http://planefinder:30053`) and that will automatically be displayed on the attached display. The balenaDash service can be configured locally by accessing the webserver on port 8081.
@@ -461,10 +471,18 @@ dump978 and dump1090 can restart the device if it hits an error. You can enable 
 
 ## Automatic balenaOS host updates
 
-Automatically keep your balenaOS host release up-to-date. To enable this service, create a *Device Variables* named `ENABLED_SERVICES` with the value of `autohupr`.
+Automatically keep your balenaOS host release up-to-date. To enable this service, create a *Device Variables* named `ENABLED_SERVICES` with the value of `autohupr`. You may also want to set the following *Device Variables*:
 
 - `HUP_CHECK_INTERVAL`: Interval between checking for available updates. Default is 1d.
 - `HUP_TARGET_VERSION`: The OS version you want balenaHUP to automatically update your device to. This is a required variable to be specified, otherwise, an update won't be performed by default. Set the variable to 'latest'/'recommended' for your device to always update to the latest OS version or set it to a specific version (e.g '2.107.10').
+
+## Custom MLAT client
+
+In the [docker compose file]([https://github.com/ketilmo/balena-ads-b/blob/shawaj/mlat-version/docker-compose.yml](https://github.com/ketilmo/balena-ads-b/blob/master/docker-compose.yml#L258-L271)) you will notice at the bottom there is a section labelled `Optional: Uncomment to enable custom mlat server.` This allows you to share MLAT data with an MLAT server of your choosing, unrelated to any of the above services.
+
+In order to enable this, you will need to fork the repo and edit the docker-compose.yml file to remove the `#` at the beginning of each line starting with the one that says `mlat-client`. Once done you should save the file, and then you can deploy it to your fleet using the manual method described above in [Part 2 – Setup balena and configure the device](#part-2--setup-balena-and-configure-the-device).
+
+You will also need to add *Device Variables* named `MLAT_CLIENT_USER` with a value of your desired username or UUID and another one named `MLAT_SERVER` with a value or your desired MLAT server address and port. For example you might have an `MLAT_CLIENT_USER` of `0327791e-3777-40a5-addc-aa13408d3b07` and an `MLAT_SERVER` of `feed.mymlatserver.com:31090`.
 
 # Part 14 – Updating to the latest version
 Updating to the latest version is trivial. If you installed balena-ads-b using the blue Deploy with balena-button, you can click it again and overwrite your current application. Choose the "Deploy to existing fleet" option, then select the fleet you want to update. All settings will be preserved. For convenience, the button is right here:

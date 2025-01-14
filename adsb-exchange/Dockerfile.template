@@ -22,9 +22,9 @@ RUN apt update && \
 FROM base AS buildstep
 
 # renovate: datasource=github-tags depName=wiedehopf/readsb versioning=loose
-ARG READSB_VERSION=v3.14.1645
-# renovate: datasource=github-tags depName=adsb-related-code/mlat-client versioning=loose
-ARG MLAT_VERSION=v0.4.2
+ARG READSB_VERSION=v3.14.1646
+# renovate: datasource=git-refs depName=wiedehopf/mlat-client versioning=loose
+ARG MLAT_VERSION=83310109efdb6d2c408121bad35629d65014d9c2
 ARG TEMP_INSTALL="git build-essential debhelper libncurses5-dev zlib1g-dev python3-dev libzstd-dev pkg-config"
 
 WORKDIR /tmp
@@ -32,8 +32,9 @@ WORKDIR /tmp
 RUN apt update && \
 	apt install -y $TEMP_INSTALL
 
-RUN git clone --depth 1 --branch $MLAT_VERSION https://github.com/adsb-related-code/mlat-client && \
+RUN git clone --single-branch https://github.com/wiedehopf/mlat-client && \
 	cd mlat-client && \
+        git checkout ${MLAT_VERSION} && \
     python3 -m venv /usr/local/share/adsbexchange/venv/ && \	
     /usr/local/share/adsbexchange/venv/bin/python3 setup.py build && \	
     /usr/local/share/adsbexchange/venv/bin/python3 setup.py install

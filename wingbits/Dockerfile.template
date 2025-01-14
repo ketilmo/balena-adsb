@@ -1,4 +1,4 @@
-FROM balenalib/%%BALENA_ARCH%%-debian:bullseye AS base
+FROM balenalib/%%BALENA_ARCH%%-debian:bookworm AS base
 LABEL maintainer="https://github.com/ketilmo"
 
 EXPOSE 30154
@@ -13,7 +13,7 @@ ENV WINGBITS_CONFIG_VERSION=0.0.8
 # renovate: datasource=custom.wingbits_version_json depName=wingbits-version-json versioning=loose
 ENV WINGBITS_COMMIT_ID=850b8746
 
-ARG PERM_INSTALL="curl gettext-base tini ncurses-bin zlib1g jq" 
+ARG PERM_INSTALL="curl gettext-base tini ncurses-dev zlib1g jq" 
 
 RUN apt update && \
 	apt install -y $PERM_INSTALL && \
@@ -23,8 +23,8 @@ RUN apt update && \
 FROM base AS buildstep
 
 # renovate: datasource=github-tags depName=wiedehopf/readsb versioning=loose
-ARG READSB_VERSION=v3.14.1645
-ARG TEMP_INSTALL="git gcc make libusb-1.0-0-dev ncurses-dev build-essential debhelper libncurses5-dev zlib1g-dev python3-dev libzstd-dev pkg-config"
+ARG READSB_VERSION=v3.14.1646
+ARG TEMP_INSTALL="git gcc make libusb-1.0-0-dev build-essential debhelper zlib1g-dev python3-dev libzstd-dev pkg-config"
 
 WORKDIR /tmp
 

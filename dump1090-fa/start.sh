@@ -2,8 +2,9 @@
 set -e
 
 # Check if service has been disabled through the DISABLED_SERVICES environment variable.
+# Also check whether user is trying to set rtlsdr serial number for dump978-fa.
 
-if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]]; then
+if [[ ",$(echo -e "${DISABLED_SERVICES}" | tr -d '[:space:]')," = *",$BALENA_SERVICE_NAME,"* ]] || [[ "$DUMP978_IDLE" = "true" ]]; then
         echo "$BALENA_SERVICE_NAME is manually disabled. Sending request to stop the service:"
         curl --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v2/applications/$BALENA_APP_ID/stop-service?apikey=$BALENA_SUPERVISOR_API_KEY" -d '{"serviceName": "'$BALENA_SERVICE_NAME'"}'
         echo " "
@@ -37,6 +38,15 @@ echo "Settings verified, proceeding with startup."
 echo " "
 
 # Variables are verified – continue with startup procedure.
+
+# Check for idle variable (for setting eeprom / serial)
+if [ -z "$DUMP1090_IDLE" ]
+then
+	echo "DUMP1090 idle not set. Continuing container startup."
+else
+	echo "DUMP1090 idle set. Idling container to allow setting rtlsdr serial."
+ 	balena-idle
+fi
 
 radio_device_lower=$(echo "${RADIO_DEVICE_TYPE}" | tr '[:upper:]' '[:lower:]')
 

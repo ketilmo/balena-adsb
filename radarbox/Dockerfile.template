@@ -19,8 +19,8 @@ RUN apt update && \
 
 FROM base AS buildstep
 
-# renovate: datasource=github-tags depName=adsb-related-code/mlat-client versioning=loose
-ARG MLAT_VERSION=v0.4.2
+# renovate: datasource=git-refs depName=wiedehopf/mlat-client versioning=loose
+ARG MLAT_VERSION=83310109efdb6d2c408121bad35629d65014d9c2
 ARG TEMP_INSTALL="build-essential debhelper python3-dev git" 
 
 RUN apt update && \
@@ -28,8 +28,9 @@ RUN apt update && \
 
 WORKDIR /tmp
 
-RUN git clone --depth 1 --branch $MLAT_VERSION https://github.com/adsbxchange/mlat-client.git && \
+RUN git clone --single-branch https://github.com/wiedehopf/mlat-client && \
 	cd mlat-client && \
+        git checkout ${MLAT_VERSION} && \
     python3 -m venv /usr/local/share/mlat-client/venv/ && \	
     /usr/local/share/mlat-client/venv/bin/python3 setup.py build && \	
     /usr/local/share/mlat-client/venv/bin/python3 setup.py install

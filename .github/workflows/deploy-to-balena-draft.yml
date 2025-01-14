@@ -1,6 +1,7 @@
 name: "Deploy to Balena - Draft"
 
 on:
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize]
     branches:
@@ -20,6 +21,6 @@ jobs:
       - name: Deploy to Balena
         uses: balena-io/deploy-to-balena-action@master
         with:
-          balena_token: ${{ secrets.BALENA_API_KEY }}
-          fleet: ${{ env.BALENA_APP }}
+          balena_token: ${{ secrets.BALENA_DRAFT_API_KEY }}
+          fleet: ${{ env.BALENA_DRAFT_FLEET }}
           multi_dockerignore: true

@@ -41,6 +41,15 @@
       "matchStrings": ["OPENSKY_VERSION=(?<currentValue>.*?)\\n"],
       "depNameTemplate": "opensky",
       "datasourceTemplate": "custom.opensky"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)Dockerfile\\.[^/]*$"],
+      "matchStrings": ["MLAT_VERSION=(?<currentDigest>.*?)\\n"],
+      "currentValueTemplate": "master",
+      "depNameTemplate": "wiedehopf/mlat-client",
+      "packageNameTemplate": "https://github.com/wiedehopf/mlat-client",
+      "datasourceTemplate": "git-refs"
     }
   ],
   "customDatasources": {
