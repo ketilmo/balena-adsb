@@ -8,10 +8,11 @@ ENV WINGBITS_DEVICE_ID=
 ENV RECEIVER_HOST=dump1090-fa
 ENV RECEIVER_PORT=30005
 
-# renovate: datasource=custom.wingbits depName=wingbits-version versioning=loose
+# renovate: datasource=custom.wingbits-version depName=wingbits-version versioning=loose
 ENV WINGBITS_CONFIG_VERSION=0.0.8
-# renovate: datasource=custom.wingbits_version_json depName=wingbits-version-json versioning=loose
+# renovate: datasource=custom.wingbits-json depName=wingbits-json versioning=loose
 ENV WINGBITS_COMMIT_ID=850b8746
+ENV WINGBITS_DATE=2024-01-13
 
 ARG PERM_INSTALL="curl gettext-base tini ncurses-dev zlib1g jq" 
 
