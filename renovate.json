@@ -24,16 +24,19 @@
     {
       "customType": "regex",
       "fileMatch": ["(^|/)Dockerfile\\.[^/]*$"],
-      "matchStrings": ["WINGBITS_COMMIT_ID=(?<currentValue>.*?)\\n"],
-      "depNameTemplate": "wingbits-version-json",
-      "datasourceTemplate": "custom.wingbits_version_json"
+      "matchStrings": [
+        "WINGBITS_COMMIT_ID=(?<currentDigest>.*?)\\nENV WINGBITS_DATE=(?<currentValue>.*?)\\n"
+      ],
+      "versioningTemplate": "regex:^(?<major>20\\d\\d)-(?<minor>\\d\\d)-(?<patch>\\d\\d).*$",
+      "depNameTemplate": "wingbits-json",
+      "datasourceTemplate": "custom.wingbits-json"
     },
     {
       "customType": "regex",
       "fileMatch": ["(^|/)Dockerfile\\.[^/]*$"],
       "matchStrings": ["WINGBITS_CONFIG_VERSION=(?<currentValue>.*?)\\n"],
       "depNameTemplate": "wingbits-version",
-      "datasourceTemplate": "custom.wingbits"
+      "datasourceTemplate": "custom.wingbits-version"
     },
     {
       "customType": "regex",
@@ -47,7 +50,6 @@
       "fileMatch": ["(^|/)Dockerfile\\.[^/]*$"],
       "matchStrings": ["MLAT_VERSION=(?<currentDigest>.*?)\\n"],
       "currentValueTemplate": "master",
-      "depNameTemplate": "wiedehopf/mlat-client",
       "packageNameTemplate": "https://github.com/wiedehopf/mlat-client",
       "datasourceTemplate": "git-refs"
     }
@@ -66,23 +68,24 @@
       ],
       "format": "plain"
     },
-    "wingbits": {
+    "wingbits-version": {
       "defaultRegistryUrlTemplate": "https://install.wingbits.com/download.sh",
       "transformTemplates": [
         "{ \"releases\": [{ \"version\": $trim($[0].releases.version.$match(/WINGBITS_CONFIG_VERSION=\"([^\\s]+)\"/).groups[0]) }] }"
       ],
       "format": "plain"
     },
-    "wingbits_version_json": {
+    "wingbits-json": {
       "defaultRegistryUrlTemplate": "https://install.wingbits.com/linux-arm64.json",
       "transformTemplates": [
-        "{\"releases\":[{\"version\": $.Version}]}"
+        "{\"releases\":[{\"version\": $.Date, \"releaseTimestamp\": $.Date, \"digest\": $.Version}]}"
       ]
     }
   },
   "packageRules": [
     {
-      "matchPackageNames": ["/wingbits/"],
+      "matchDepNames": ["/^wingbits/"],
+      "matchDatasources": ["custom.wingbits-version", "custom.wingbits-json"],
       "groupName": "wingbits version to latest"
     }
   ],
