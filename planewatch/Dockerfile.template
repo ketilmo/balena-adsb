@@ -7,7 +7,7 @@ ARG PLANEWATCH_VERSION=v0.0.4
 
 # specify mlat-client version
 # renovate: datasource=github-tags depName=mutability/mlat-client versioning=loose
-ARG MLAT_VERSION=v0.2.13
+ARG MLAT_VERSION=83310109efdb6d2c408121bad35629d65014d9c2
 
 # install build step pre-requs
 ARG TEMP_INSTALL="python3-dev python3-venv"
