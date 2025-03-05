@@ -133,7 +133,7 @@ These sites suggest the Raspberry Pi 3 Model B+ as the preferred device. Still, 
 
 In addition to the device, you will need an RTL-SDR-compatible USB dongle. The dongles are based on a digital television tuner, and numerous types will work – both generic TV sticks and specialized ADS-B sticks (produced by FlightAware). Although both options work, the ADS-B sticks seem to perform a little better.
 
-If you live in the US, and want to track UAT traffic in addition to ADS-B traffic, you can use two dongles in parallell. Please note that the blue FlightAware USB devices should only be used for ADS-B traffic, as they have an integrated filter optimized explicitly for the 1090 MHz frequencies. The orange FlightAware USB devices work well for tracking UAT traffic. See [Part 11 – Configure UAT (Optional and US only)](#part-11--configure-uat-optional-and-us-only-) for more details.
+If you live in the US, and want to track UAT traffic in addition to ADS-B traffic, you can use two dongles in parallell. Please note that the blue FlightAware USB devices should only be used for ADS-B traffic, as they have an integrated filter optimized explicitly for the 1090 MHz frequencies. The orange FlightAware USB devices work well for tracking UAT traffic. See [Part 11 – Configure UAT (Optional and US only)](#part-11--configure-uat-optional-and-us-only) for more details.
 
 # Part 2 – Setup balena and configure the device
 
